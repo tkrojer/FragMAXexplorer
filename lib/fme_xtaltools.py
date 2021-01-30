@@ -32,11 +32,11 @@ class mtztools(object):
         }
 
     def read_mtz_header(self):
-        self.info['DataProcessingUnitCell'] = str(self.mtz.spacegroup.short_name())
+        self.info['DataProcessingSpaceGroup'] = str(self.mtz.spacegroup.short_name())
         self.info['DataProcessingPointGroup'] = str(self.mtz.spacegroup.point_group_hm())
         self.info['DataProcessingUnitCellVolume'] = str(self.mtz.cell.volume)
         self.info['DataProcessingLattice'] = str(self.mtz.spacegroup.crystal_system_str())
-        self.info['DataCollectionWavelength'] = self.mtz.dataset(0).wavelength
+        self.info['DataCollectionWavelength'] = self.mtz.dataset(1).wavelength
         self.info['DataProcessingUnitCell'] = (
             str(self.mtz.cell.a) + ' ' + str(self.mtz.cell.b) + ' ' + str(self.mtz.cell.c) + ' ' +
             str(self.mtz.cell.alpha) + ' ' + str(self.mtz.cell.beta) + ' ' + str(self.mtz.cell.gamma)
@@ -57,7 +57,6 @@ class logtools(object):
                             'DataProcessingResolutionLowInnerShell':        None,
                             'DataProcessingResolutionHigh':                 None,
                             'DataProcessingResolutionHighOuterShell':       None,
-                            'DataProcessingResolutionOverall':              None,
                             'DataProcessingRmergeOverall':                  None,
                             'DataProcessingRmergeLow':                      None,
                             'DataProcessingRmergeHigh':                     None,
