@@ -2,6 +2,10 @@ import os, glob
 
 from PyQt4 import QtGui, QtCore
 
+sys.path.append(os.path.join(os.getenv('FragMAXexplorer_DIR'), 'lib'))
+
+import fme_xtaltools
+
 class read_process_dir(QtCore.QThread):
 
     def __init__(self,processDir,database,projectDir):
