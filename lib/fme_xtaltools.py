@@ -1,4 +1,5 @@
 import gemmi
+import json
 
 class pdbtools(object):
 
