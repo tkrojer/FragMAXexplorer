@@ -1,15 +1,13 @@
 from PyQt4 import QtGui
 import os
 
-def set_stylesheet(xce_object):
+def set_stylesheet(fme_object):
     palette = QtGui.QPalette()
 
     palette.setColor(QtGui.QPalette.Background, QtGui.QColor("#ececec"))
-    xce_object.setPalette(palette)
+    fme_object.setPalette(palette)
 
-    icons_directory = os.path.join((os.getenv('XChemExplorer_DIR')), 'icons')
-
-    xce_object.setStyleSheet("""
+    fme_object.setStyleSheet("""
     QApplication {
     padding: 0px;
     }
@@ -35,10 +33,6 @@ def set_stylesheet(xce_object):
     QComboBox QAbstractItemView {
     background: rgb(255, 255, 255);
     border: 1px solid rgb(184, 192, 210);
-    }
-    QComboBox::down-arrow {
-    image: url(""" + icons_directory + """/drop-down.png);
-    background-color: rgb(255, 255, 255);
     }
     QComboBox::drop-down {
     background-color: rgb(255, 255, 255);
