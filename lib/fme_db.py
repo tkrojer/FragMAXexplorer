@@ -149,10 +149,17 @@ class data_source:
         cursor.execute(sql)
 
         query = cursor.fetchall()
+
+        columns_in_table = []
+        for c in self.tableDict[table]:
+            columns_in_table.append(c)
+
         if not query:
             value_string=''
             column_string=''
             for key in data_dict:
+                if not key in columns_in_table:
+                    continue
                 value = data_dict[key]
                 value_string += "'" + str(value) + "'" + ','
                 column_string += key + ','
@@ -160,6 +167,8 @@ class data_source:
         else:
             update_string=''
             for key in data_dict:
+                if not key in columns_in_table:
+                    continue
                 value = data_dict[key]
                 update_string += str(key) + '=' + "'" + str(value) + "',"
             cursor.execute(
