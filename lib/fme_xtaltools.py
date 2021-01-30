@@ -80,7 +80,7 @@ class logtools(object):
 
 
 
-    def aimless_logile(self):
+    def read_aimless(self):
         for line_number, line in enumerate(open(self.logfile)):
             if 'Low resolution limit' in line and len(line.split()) == 6:
                 self.aimless['DataProcessingResolutionLow'] = line.split()[3]
@@ -130,7 +130,7 @@ class logtools(object):
         return self.aimless
 
 
-    def dials_json_logfile(self):
+    def read_json(self):
         with open(self.logfile, 'r') as log:
             data = log.read()
         obj = json.loads(data)

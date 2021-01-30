@@ -16,7 +16,7 @@ class read_process_dir(QtCore.QThread):
 
         self.pipelineDict = {
             'autoproc':     ['truncate-unique.mtz', 'aimless.log'],
-            'dials':        ['mtz', 'log'],
+            'dials':        ['DataFiles/*_free.mtz', 'LogFiles/*_merging-statistics.json'],
             'edna':         ['*_noanom_truncate.mtz', '*_aimless_noanom.log'],
             'fastdp':       ['mtz', 'log'],
             'xdsapp':       ['mtz', 'log'],
@@ -55,7 +55,10 @@ class read_process_dir(QtCore.QThread):
                 print mtzFile, db
                 break
             for log in glob.glob(os.path.join(s,self.pipelineDict[autoproc_pipeline][1])):
-                db = fme_xtaltools.logtools(log).get_info()
+                if log.endswith('*log'):
+                    db = fme_xtaltools.logtools(log).read_aimless()
+                elif log.endswith('*json'):
+                    db = fme_xtaltools.logtools(log).read_json()
                 logFile = log
                 print logFile, db
                 break
