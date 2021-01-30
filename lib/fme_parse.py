@@ -10,7 +10,7 @@ class read_process_dir(QtCore.QThread):
         self.projectDir = projectDir
 
         self.pipelineDict = {
-            'autoproc':     ['mtz', 'log'],
+            'autoproc':     ['truncate-unique.mtz', 'aimless.log'],
             'dials':        ['mtz', 'log'],
             'edna':         ['*_noanom_truncate.mtz', '*_aimless_noanom.log'],
             'fastdp':       ['mtz', 'log'],
@@ -23,11 +23,14 @@ class read_process_dir(QtCore.QThread):
         self.parse_file_system()
 
     def parse_file_system(self):
-        for s in sorted(glob.glob(os.path.join(self.processeDir,'*','*','*','*'))):
-#            print(s)
+        for s in sorted(glob.glob(os.path.join(self.processeDir,'*','*','*'))):
+            print('>>>',s)
             protein = s.split('/')[8]
             xtal = s.split('/')[9]
             run =  s.split('/')[10]
+            print 'protein',protein
+            print 'xtal',xtal
+            print 'run',run
             for p in self.pipelineDict:
                 db_dict = {}
                 db_dict['DataProcessingProgram'] = p
@@ -38,7 +41,7 @@ class read_process_dir(QtCore.QThread):
                 mtzDBdict = {}
                 logFile = None
 #                print(p)
-                print os.path.join(s,p,self.pipelineDict[p][0])
+                print '--',os.path.join(s,p,self.pipelineDict[p][0])
                 quit()
                 for mtz in glob.glob(os.path.join(s,p,self.pipelineDict[p][0])):
                     db = fme_xtaltools.mtztools(mtz).get_info()
