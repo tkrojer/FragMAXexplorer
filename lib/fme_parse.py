@@ -10,9 +10,9 @@ import fme_db
 
 class read_process_dir(QtCore.QThread):
 
-    def __init__(self,processDir,database,projectDir):
+    def __init__(self,fragmaxDir,database,projectDir):
         QtCore.QThread.__init__(self)
-        self.processeDir =  processDir
+        self.fragmaxDir =  fragmaxDir
         self.projectDir = projectDir
         self.db = fme_db.data_source('/home/tobkro/tmp/fme.sqlite')
 
@@ -25,12 +25,14 @@ class read_process_dir(QtCore.QThread):
             'xdsxscale':    ['mtz', 'log']
         }
 
+        self.refi = ['buster', 'dimple', 'fspipeline' ]
+
 
     def run(self):
         self.parse_file_system()
 
     def parse_file_system(self):
-        for s in sorted(glob.glob(os.path.join(self.processeDir,'*','*','*','*'))):
+        for s in sorted(glob.glob(os.path.join(self.fragmaxDir,'process','*','*','*','*'))):
             autoproc_pipeline = s.split('/')[11]
             if not autoproc_pipeline in self.pipelineDict:
                 continue
@@ -59,9 +61,19 @@ class read_process_dir(QtCore.QThread):
                 db_dict.update(logDict)
                 db_dict['DataProcessingPathToLogfile'] = log
                 break
-            for d in db_dict:
-                print d,db_dict[d]
-            self.update_db(db_dict)
+
+    def parse_refinement_results(self,db_dict):
+        for r in self.refi:
+            db_dict['RefinementProgram'] = r
+            for ref in glob.glob(os.path.join(self.fragmaxDir,'results',db_dict['DataCollectionRun'],db_dict['DataProcessingProgram'],r,'final.pdb')):
+                db_dict['RefinementPDB_latest'] = ref
+                if os.path.isfile(ref.replace('.pdb','.mtz')):
+                    db_dict['RefinementMTZ_latest'] = ref.replace('.pdb','.mtz')
+                pdbDict = fme_xtaltools.pdbtools(ref).get_refinement_stats_dict()
+                db_dict.update(pdbDict)
+                break
+        self.update_db(db_dict)
+
 
     def update_db(self,db_dict):
         print('hallo')
