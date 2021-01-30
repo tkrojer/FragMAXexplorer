@@ -44,7 +44,6 @@ class read_process_dir(QtCore.QThread):
             mtzDBdict = {}
             logFile = None
             print '--',os.path.join(s,autoproc_pipeline,self.pipelineDict[autoproc_pipeline][0])
-            quit()
             for mtz in glob.glob(os.path.join(s,self.pipelineDict[autoproc_pipeline][0])):
                 db = fme_xtaltools.mtztools(mtz).get_info()
                 mtzFile = mtz
@@ -55,6 +54,8 @@ class read_process_dir(QtCore.QThread):
                 logFile = log
                 print logFile, db
                 break
+
+            quit()
 
     def update_db(self):
         print('hallo')
