@@ -50,19 +50,17 @@ class read_process_dir(QtCore.QThread):
             logFile = None
             print '--',os.path.join(s,autoproc_pipeline,self.pipelineDict[autoproc_pipeline][0])
             for mtz in glob.glob(os.path.join(s,self.pipelineDict[autoproc_pipeline][0])):
-                db = fme_xtaltools.mtztools(mtz).read_mtz_header()
-                mtzFile = mtz
-                print mtzFile, db
+                db_dict.update(fme_xtaltools.mtztools(mtz).read_mtz_header())
+                db_dict['DataProcessingPathToMTZfile'] = mtz
                 break
             for log in glob.glob(os.path.join(s,self.pipelineDict[autoproc_pipeline][1])):
                 if log.endswith('*log'):
-                    db = fme_xtaltools.logtools(log).read_aimless()
+                    db_dict.update(fme_xtaltools.logtools(log).read_aimless())
                 elif log.endswith('*json'):
-                    db = fme_xtaltools.logtools(log).read_json()
-                logFile = log
-                print logFile, db
+                    db_dict.update(fme_xtaltools.logtools(log).read_json())
+                db_dict['DataProcessingPathToLogfile'] = log
                 break
-
+            print db_dict
             quit()
 
     def update_db(self):
