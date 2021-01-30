@@ -19,7 +19,7 @@ class pdbtools(object):
 
 class mtztools(object):
 
-    def __init__(self,pdb):
+    def __init__(self,mtz):
         self.mtz = gemmi.read_mtz_file(mtz)
 
         self.info = {
@@ -32,14 +32,14 @@ class mtztools(object):
         }
 
     def read_mtz_header(self):
-        self.info['DataProcessingUnitCell'] = str(mtz.spacegroup.short_name())
-        self.info['DataProcessingPointGroup'] = str(mtz.spacegroup.point_group_hm())
-        self.info['DataProcessingUnitCellVolume'] = str(mtz.cell.volume)
-        self.info['DataProcessingLattice'] = str(mtz.spacegroup.crystal_system_str())
-        self.info['DataCollectionWavelength'] = mtz.dataset(0).wavelength
+        self.info['DataProcessingUnitCell'] = str(self.mtz.spacegroup.short_name())
+        self.info['DataProcessingPointGroup'] = str(self.mtz.spacegroup.point_group_hm())
+        self.info['DataProcessingUnitCellVolume'] = str(self.mtz.cell.volume)
+        self.info['DataProcessingLattice'] = str(self.mtz.spacegroup.crystal_system_str())
+        self.info['DataCollectionWavelength'] = self.mtz.dataset(0).wavelength
         self.info['DataProcessingUnitCell'] = (
-            str(mtz.cell.a) + ' ' + str(mtz.cell.b) + ' ' + str(mtz.cell.c) + ' ' +
-            str(mtz.cell.alpha) + ' ' + str(mtz.cell.beta) + ' ' + str(mtz.cell.gamma)
+            str(self.mtz.cell.a) + ' ' + str(self.mtz.cell.b) + ' ' + str(self.mtz.cell.c) + ' ' +
+            str(self.mtz.cell.alpha) + ' ' + str(self.mtz.cell.beta) + ' ' + str(self.mtz.cell.gamma)
         )
 
         return self.info
