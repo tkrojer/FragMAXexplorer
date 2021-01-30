@@ -80,7 +80,6 @@ class read_process_dir(QtCore.QThread):
     def update_db(self,db_dict):
         print('hallo')
         self.db.update_db('plexTable',db_dict)
-        quit()
 
     def copy_files(self):
         print('hallo')
