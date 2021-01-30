@@ -127,7 +127,7 @@ class data_source:
             cursor.execute("SELECT * FROM "+table)
             for column in cursor.description:
                 existing_columns.append(column[0])
-            for column in tableDict[table]:
+            for column in self.tableDict[table]:
                 if column[0] not in existing_columns:
                     cursor.execute("alter table " + table + " add column '" + column[0] + "' '" + column[2] + "'")
                     connect.commit()
