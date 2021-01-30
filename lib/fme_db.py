@@ -34,6 +34,7 @@ class data_source:
             ['CrystalName',                             'Sample ID',                            'TEXT',                 0],
             ['DataCollectionVisit',                     'Visit',                                'TEXT',                 0],
             ['DataCollectionRun',                       'Run',                                  'TEXT',                 0],
+            ['DataCollectionWavelength',                'Wavelength',                           'TEXT',                 0],
             ['DataProcessingProgram',                   'Program',                              'TEXT',                 1],
             ['DataProcessingPointGroup',                'DataProcessing\nPointGroup',           'TEXT',                 1],
             ['DataProcessingSpaceGroup',                'DataProcessing\nSpaceGroup',           'TEXT',                 1],
@@ -94,6 +95,7 @@ class data_source:
         self.tableDict = {  'mainTable':    self.column_list,
                             'plexTable':    self.data_collection_columns    }
 
+        self.create_missing_columns()
 
 
     def create_empty_data_source_file(self):
