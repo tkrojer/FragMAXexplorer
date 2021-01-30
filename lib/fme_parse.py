@@ -36,24 +36,24 @@ class read_process_dir(QtCore.QThread):
             print 'run',run
 
             db_dict = {}
-            db_dict['DataProcessingProgram'] = p
+            db_dict['DataProcessingProgram'] = autoproc_pipeline
             db_dict['ProteinName'] = protein
             db_dict['CrystalName'] = xtal
             db_dict['DataCollectionRun'] = run
             mtzFile = None
             mtzDBdict = {}
             logFile = None
-#                print(p)
             print '--',os.path.join(s,p,self.pipelineDict[p][0])
             quit()
             for mtz in glob.glob(os.path.join(s,self.pipelineDict[autoproc_pipeline][0])):
                 db = fme_xtaltools.mtztools(mtz).get_info()
                 mtzFile = mtz
-#                    print mtzFile, db
-#                    break
+                print mtzFile, db
+                break
             for log in glob.glob(os.path.join(s,self.pipelineDict[autoproc_pipeline][1])):
                 db = fme_xtaltools.logtools(log).get_info()
                 logFile = log
+                print logFile, db
                 break
 
     def update_db(self):
