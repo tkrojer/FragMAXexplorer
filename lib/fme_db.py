@@ -158,7 +158,9 @@ class data_source:
             value_string=''
             column_string=''
             for key in data_dict:
+                print key,data_dict[key]
                 if not key in columns_in_table:
+                    print 'oirfurughru'
                     continue
                 value = data_dict[key]
                 value_string += "'" + str(value) + "'" + ','
