@@ -24,7 +24,7 @@ class read_process_dir(QtCore.QThread):
 
     def parse_file_system(self):
         for s in sorted(glob.glob(os.path.join(self.processeDir,'*','*','*','*'))):
-            print(s)
+#            print(s)
             protein = s.split('/')[8]
             xtal = s.split('/')[9]
             run =  s.split('/')[10]
@@ -37,14 +37,14 @@ class read_process_dir(QtCore.QThread):
                 mtzFile = None
                 mtzDBdict = {}
                 logFile = None
-                print(p)
+#                print(p)
                 print os.path.join(s,p,self.pipelineDict[p][0])
                 quit()
                 for mtz in glob.glob(os.path.join(s,p,self.pipelineDict[p][0])):
                     db = fme_xtaltools.mtztools(mtz).get_info()
                     mtzFile = mtz
-                    print mtzFile, db
-                    break
+#                    print mtzFile, db
+#                    break
                 for log in glob.glob(os.path.join(s,p,self.pipelineDict[p][1])):
                     db = fme_xtaltools.logtools(log).get_info()
                     logFile = log

@@ -51,7 +51,6 @@ class FragMAXexplorer(QtGui.QApplication):
 
     def parse_process_directory(self):
         d = '/data/visitors/biomax/20200592/20200618/fragmax/process'
-        print d
         self.work_thread = fme_parse.read_process_dir(d,'db','dir')
         self.connect(self.work_thread, QtCore.SIGNAL("update_progress_bar"), self.update_progress_bar)
         self.connect(self.work_thread, QtCore.SIGNAL("update_status_bar(QString)"), self.update_status_bar)
