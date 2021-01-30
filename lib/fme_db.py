@@ -152,7 +152,7 @@ class data_source:
 
         columns_in_table = []
         for c in self.tableDict[table]:
-            columns_in_table.append(c)
+            columns_in_table.append(c[0])
 
         if not query:
             value_string=''
