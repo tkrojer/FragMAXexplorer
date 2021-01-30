@@ -73,7 +73,6 @@ class logtools(object):
                             'DataProcessingCChalfOverall':                  None,
                             'DataProcessingCChalfLow':                      None,
                             'DataProcessingCChalfHigh':                     None,
-                            'DataProcessingResolutionHigh15sigma':          None,
                             'DataProcessingUniqueReflectionsLow':           None,
                             'DataProcessingUniqueReflectionsHigh':          None,
                             'DataProcessingUniqueReflectionsOverall':       None          }
