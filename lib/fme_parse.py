@@ -42,7 +42,7 @@ class read_process_dir(QtCore.QThread):
                     db = fme_xtaltools.mtztools(mtz).get_info()
                     mtzFile = mtz
                     break
-                for log in glob.glob(os.path.join(s,p,self.pipelineDict[p][2])):
+                for log in glob.glob(os.path.join(s,p,self.pipelineDict[p][1])):
                     db = fme_xtaltools.logtools(log).get_info()
                     logFile = log
                     break
