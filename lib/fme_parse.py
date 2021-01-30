@@ -23,7 +23,10 @@ class read_process_dir(QtCore.QThread):
         self.parse_file_system()
 
     def parse_file_system(self):
-        for s in sorted(glob.glob(os.path.join(self.processeDir,'*','*','*'))):
+        for s in sorted(glob.glob(os.path.join(self.processeDir,'*','*','*','*'))):
+            autoproc_pipeline = s.split('/')[11]
+            if not autoproc_pipeline in self.pipelineDict:
+                continue
             print('>>>',s)
             protein = s.split('/')[8]
             xtal = s.split('/')[9]
@@ -31,27 +34,28 @@ class read_process_dir(QtCore.QThread):
             print 'protein',protein
             print 'xtal',xtal
             print 'run',run
+
             for p in self.pipelineDict:
-                db_dict = {}
-                db_dict['DataProcessingProgram'] = p
-                db_dict['ProteinName'] = protein
-                db_dict['CrystalName'] = xtal
-                db_dict['DataCollectionRun'] = run
-                mtzFile = None
-                mtzDBdict = {}
-                logFile = None
+            db_dict = {}
+            db_dict['DataProcessingProgram'] = p
+            db_dict['ProteinName'] = protein
+            db_dict['CrystalName'] = xtal
+            db_dict['DataCollectionRun'] = run
+            mtzFile = None
+            mtzDBdict = {}
+            logFile = None
 #                print(p)
-                print '--',os.path.join(s,p,self.pipelineDict[p][0])
-                quit()
-                for mtz in glob.glob(os.path.join(s,p,self.pipelineDict[p][0])):
-                    db = fme_xtaltools.mtztools(mtz).get_info()
-                    mtzFile = mtz
+            print '--',os.path.join(s,p,self.pipelineDict[p][0])
+            quit()
+            for mtz in glob.glob(os.path.join(s,self.pipelineDict[autoproc_pipeline][0])):
+                db = fme_xtaltools.mtztools(mtz).get_info()
+                mtzFile = mtz
 #                    print mtzFile, db
 #                    break
-                for log in glob.glob(os.path.join(s,p,self.pipelineDict[p][1])):
-                    db = fme_xtaltools.logtools(log).get_info()
-                    logFile = log
-                    break
+            for log in glob.glob(os.path.join(s,self.pipelineDict[autoproc_pipeline][1])):
+                db = fme_xtaltools.logtools(log).get_info()
+                logFile = log
+                break
 
     def update_db(self):
         print('hallo')
