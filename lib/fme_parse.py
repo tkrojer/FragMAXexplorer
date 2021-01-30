@@ -19,10 +19,10 @@ class read_process_dir(QtCore.QThread):
         self.pipelineDict = {
             'autoproc':     ['truncate-unique.mtz', 'aimless.log'],
             'dials':        ['DataFiles/*_free.mtz', 'LogFiles/*_merging-statistics.json'],
-            'edna':         ['*_noanom_truncate.mtz', '*_aimless_noanom.log'],
-            'fastdp':       ['*_noanom_fast_dp.mtz', '*_noanom_aimless.log'],
-            'xdsapp':       ['*_data_F.mtz', 'log'],
-            'xdsxscale':    ['mtz', 'log']
+            'edna':         ['*_noanom_truncate.mtz', '*_aimless_noanom.log']
+#            'fastdp':       ['*_noanom_fast_dp.mtz', '*_noanom_aimless.log'],
+#            'xdsapp':       ['*_data_F.mtz', 'log'],
+#            'xdsxscale':    ['mtz', 'log']
         }
 
         self.refi = ['buster', 'dimple', 'fspipeline' ]

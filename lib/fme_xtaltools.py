@@ -22,7 +22,10 @@ class pdbtools(object):
 class mtztools(object):
 
     def __init__(self,mtz):
-        self.mtz = gemmi.read_mtz_file(mtz)
+        try:
+            self.mtz = gemmi.read_mtz_file(mtz)
+        except RuntimeError:
+            pass
 
         self.info = {
             'DataProcessingPointGroup':     None,
