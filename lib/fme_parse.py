@@ -6,6 +6,7 @@ from PyQt4 import QtGui, QtCore
 sys.path.append(os.path.join(os.getenv('FragMAXexplorer_DIR'), 'lib'))
 
 import fme_xtaltools
+import fme_db
 
 class read_process_dir(QtCore.QThread):
 
@@ -13,6 +14,7 @@ class read_process_dir(QtCore.QThread):
         QtCore.QThread.__init__(self)
         self.processeDir =  processDir
         self.projectDir = projectDir
+        self.db = fme_db.data_source('/home/tobkro/tmp/fme.sqlite')
 
         self.pipelineDict = {
             'autoproc':     ['truncate-unique.mtz', 'aimless.log'],
@@ -59,10 +61,12 @@ class read_process_dir(QtCore.QThread):
                 break
             for d in db_dict:
                 print d,db_dict[d]
-            quit()
+            self.update_db(db_dict)
 
-    def update_db(self):
+    def update_db(self,db_dict):
         print('hallo')
+        self.db.update_db('plexTable',db_dict)
+        quit()
 
     def copy_files(self):
         print('hallo')

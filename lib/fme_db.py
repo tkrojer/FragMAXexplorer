@@ -131,7 +131,7 @@ class data_source:
                     connect.commit()
 
 
-    def update_db(self,sampleID,run,proc,refi,table,data_dict):
+    def update_db(self, table, data_dict):
         data_dict['LastUpdated'] = str(datetime.now().strftime("%Y-%m-%d %H:%M"))
         data_dict['LastUpdated_by'] = getpass.getuser()
         connect = sqlite3.connect(self.data_source_file)

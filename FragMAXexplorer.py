@@ -36,7 +36,7 @@ class FragMAXexplorer(QtGui.QApplication):
         self.window.setWindowTitle("FragMAXexplorer")
         self.screen = QtGui.QDesktopWidget().screenGeometry()
         LayoutObjects(self).main_layout(self)
-#        self.db = fme_db.data_source('/Users/tobiaskrojer/Scripts/FragMAXexplorer/lib/testx.sqlite')
+#        self.db = fme_db.data_source('/home/tobkro/tmp/fme.sqlite')
 #        self.populate_datasets_summary_table()
 
     def show_splash_screen(self):
