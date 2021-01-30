@@ -20,8 +20,8 @@ class read_process_dir(QtCore.QThread):
             'autoproc':     ['truncate-unique.mtz', 'aimless.log'],
             'dials':        ['DataFiles/*_free.mtz', 'LogFiles/*_merging-statistics.json'],
             'edna':         ['*_noanom_truncate.mtz', '*_aimless_noanom.log'],
-            'fastdp':       ['mtz', 'log'],
-            'xdsapp':       ['mtz', 'log'],
+            'fastdp':       ['*_noanom_fast_dp.mtz', '*_noanom_aimless.log'],
+            'xdsapp':       ['*_data_F.mtz', 'log'],
             'xdsxscale':    ['mtz', 'log']
         }
 
@@ -74,7 +74,7 @@ class read_process_dir(QtCore.QThread):
                 pdbDict = fme_xtaltools.pdbtools(ref).get_refinement_stats_dict()
                 db_dict.update(pdbDict)
                 break
-        self.update_db(db_dict)
+            self.update_db(db_dict)
 
 
     def update_db(self,db_dict):

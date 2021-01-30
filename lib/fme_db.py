@@ -32,7 +32,6 @@ class data_source:
         self.data_collection_columns = [
             ['ID',                                      'ID',                                   'INTEGER PRIMARY KEY'],
             ['CrystalName',                             'Sample ID',                            'TEXT',                 0],
-            ['DataCollectionVisit',                     'Visit',                                'TEXT',                 0],
             ['DataCollectionRun',                       'Run',                                  'TEXT',                 0],
             ['DataCollectionWavelength',                'Wavelength',                           'TEXT',                 0],
             ['DataProcessingProgram',                   'Program',                              'TEXT',                 1],
@@ -62,8 +61,6 @@ class data_source:
             ['DataProcessingCChalfHigh',                'CC(1/2)\nHigh',                        'TEXT',                 1],
             ['DataProcessingPathToLogfile',             'DataProcessingPathToLogfile',          'TEXT',                 1],
             ['DataProcessingPathToMTZfile',             'DataProcessingPathToMTZfile',          'TEXT',                 1],
-            ['DataProcessingLOGfileName',               'DataProcessingLOGfileName',            'TEXT',                 0],
-            ['DataProcessingMTZfileName',               'DataProcessingMTZfileName',            'TEXT',                 0],
             ['DataProcessingUniqueReflectionsOverall',  'Unique Reflections\nOverall',          'TEXT',                 1],
             ['DataProcessingUniqueReflectionsLow',      'Unique Reflections\nlow',              'TEXT',                 1],
             ['DataProcessingUniqueReflectionsHigh',     'Unique Reflections\nhigh',             'TEXT',                 1],
