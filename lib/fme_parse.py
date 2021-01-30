@@ -35,7 +35,6 @@ class read_process_dir(QtCore.QThread):
             print 'xtal',xtal
             print 'run',run
 
-            for p in self.pipelineDict:
             db_dict = {}
             db_dict['DataProcessingProgram'] = p
             db_dict['ProteinName'] = protein
