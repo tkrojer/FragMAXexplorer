@@ -57,6 +57,7 @@ class read_process_dir(QtCore.QThread):
             for log in glob.glob(os.path.join(s,self.pipelineDict[autoproc_pipeline][1])):
                 print 'log',log
                 if log.endswith('*log'):
+                    print 'fiufhiurig'
                     logDict = fme_xtaltools.logtools(log).read_aimless()
                 elif log.endswith('*json'):
                     logDict = fme_xtaltools.logtools(log).read_json()

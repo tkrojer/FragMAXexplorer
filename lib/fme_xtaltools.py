@@ -81,6 +81,7 @@ class logtools(object):
 
 
     def read_aimless(self):
+        print 'here'
         for line_number, line in enumerate(open(self.logfile)):
             if 'Low resolution limit' in line and len(line.split()) == 6:
                 self.aimless['DataProcessingResolutionLow'] = line.split()[3]
