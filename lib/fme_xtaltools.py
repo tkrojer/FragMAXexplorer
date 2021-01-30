@@ -124,6 +124,8 @@ class logtools(object):
                 self.aimless['DataProcessingCChalfHigh'] = line.split()[3]
             if 'Total number unique' in line and len(line.split()) == 6:
                 self.aimless['DataProcessingUniqueReflectionsOverall'] = line.split()[3]
+                self.aimless['DataProcessingUniqueReflectionsLow'] = line.split()[4]
+                self.aimless['DataProcessingUniqueReflectionsHigh'] = line.split()[5]
 
         return self.aimless
 
