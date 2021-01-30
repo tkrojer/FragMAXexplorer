@@ -12,7 +12,7 @@ class read_process_dir(QtCore.QThread):
         self.pipelineDict = {
             'autoproc':     ['mtz', 'log'],
             'dials':        ['mtz', 'log'],
-            'edna':         ['mtz', 'log'],
+            'edna':         ['*_noanom_truncate.mtz', '*_aimless_noanom.log'],
             'fastdp':       ['mtz', 'log'],
             'xdsapp':       ['mtz', 'log'],
             'xdsxscale':    ['mtz', 'log']
@@ -41,6 +41,7 @@ class read_process_dir(QtCore.QThread):
                 for mtz in glob.glob(os.path.join(s,p,self.pipelineDict[p][0])):
                     db = fme_xtaltools.mtztools(mtz).get_info()
                     mtzFile = mtz
+                    print mtzFile, db
                     break
                 for log in glob.glob(os.path.join(s,p,self.pipelineDict[p][1])):
                     db = fme_xtaltools.logtools(log).get_info()
