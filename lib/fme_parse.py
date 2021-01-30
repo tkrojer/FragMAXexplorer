@@ -44,6 +44,7 @@ class read_process_dir(QtCore.QThread):
             db_dict['DataProcessingProgram'] = autoproc_pipeline
             db_dict['ProteinName'] = protein
             db_dict['CrystalName'] = xtal
+            self.emit(QtCore.SIGNAL('update_status_bar(QString)'), xtal)
             db_dict['DataCollectionRun'] = run
             mtzFile = None
             mtzDBdict = {}
