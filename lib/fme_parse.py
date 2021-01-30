@@ -62,6 +62,7 @@ class read_process_dir(QtCore.QThread):
                 db_dict.update(logDict)
                 db_dict['DataProcessingPathToLogfile'] = log
                 break
+            self.parse_refinement_results(db_dict)
 
     def parse_refinement_results(self,db_dict):
         for r in self.refi:
