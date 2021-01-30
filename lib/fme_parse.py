@@ -38,6 +38,8 @@ class read_process_dir(QtCore.QThread):
                 mtzDBdict = {}
                 logFile = None
                 print(p)
+                print os.path.join(s,p,self.pipelineDict[p][0])
+                quit()
                 for mtz in glob.glob(os.path.join(s,p,self.pipelineDict[p][0])):
                     db = fme_xtaltools.mtztools(mtz).get_info()
                     mtzFile = mtz
