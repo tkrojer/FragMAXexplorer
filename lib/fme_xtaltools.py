@@ -38,7 +38,7 @@ class mtztools(object):
         self.info['DataProcessingLattice'] = str(mtz.spacegroup.crystal_system_str())
         self.info['DataCollectionWavelength'] = mtz.dataset(0).wavelength
         self.info['DataProcessingUnitCell'] = (
-            str(mtz.cell.a) + ' ' + str(mtz.cell.b) + ' ' + str(mtz.cell.c) + ' '
+            str(mtz.cell.a) + ' ' + str(mtz.cell.b) + ' ' + str(mtz.cell.c) + ' ' +
             str(mtz.cell.alpha) + ' ' + str(mtz.cell.beta) + ' ' + str(mtz.cell.gamma)
         )
 
