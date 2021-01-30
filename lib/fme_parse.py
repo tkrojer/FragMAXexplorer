@@ -1,4 +1,5 @@
 import os, glob
+import sys
 
 from PyQt4 import QtGui, QtCore
 
