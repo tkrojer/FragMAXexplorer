@@ -12,6 +12,7 @@ from stylesheet import set_stylesheet
 from layout import *
 
 import fme_db
+import fme_parse
 
 class FragMAXexplorer(QtGui.QApplication):
     def __init__(self, args):
@@ -47,6 +48,21 @@ class FragMAXexplorer(QtGui.QApplication):
         time.sleep(2)
         splash.close()
 
+
+    def parse_process_directory(self):
+        d = '/data/visitors/biomax/20200592/20200618/fragmax/process'
+        print d
+        self.work_thread = fme_parse.read_process_dir(d,'db','dir')
+        self.connect(self.work_thread, QtCore.SIGNAL("update_progress_bar"), self.update_progress_bar)
+        self.connect(self.work_thread, QtCore.SIGNAL("update_status_bar(QString)"), self.update_status_bar)
+        self.connect(self.work_thread, QtCore.SIGNAL("finished()"), self.thread_finished)
+        self.connect(self.work_thread, QtCore.SIGNAL("datasource_menu_reload_samples"),
+                         self.datasource_menu_reload_samples)
+        self.work_thread.start()
+
+
+    def datasource_menu_reload_samples(self):
+        print('hallo')
 
     def populate_datasets_summary_table(self):
         self.status_bar.showMessage(
@@ -129,6 +145,18 @@ class FragMAXexplorer(QtGui.QApplication):
                     #                                cell_text.setText('')
                 cell_text.setTextAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignCenter)
                 table.setItem(row, column, cell_text)
+
+    def update_progress_bar(self, progress):
+        self.progress_bar.setValue(progress)
+
+    def update_status_bar(self, message):
+        self.status_bar.showMessage(message)
+
+    def thread_finished(self):
+        self.explorer_active = 0
+        self.update_progress_bar(0)
+        self.update_status_bar('idle')
+
 
 
 #    def populate_datasets_summary_table(self):

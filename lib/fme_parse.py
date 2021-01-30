@@ -1,3 +1,5 @@
+import os, glob
+
 from PyQt4 import QtGui, QtCore
 
 class read_process_dir(QtCore.QThread):
@@ -22,6 +24,7 @@ class read_process_dir(QtCore.QThread):
 
     def parse_file_system(self):
         for s in sorted(glob.glob(os.path.join(self.processeDir,'*','*','*','*'))):
+            print(s)
             protein = s.split('/')[8]
             xtal = s.split('/')[9]
             run =  s.split('/')[10]
@@ -34,6 +37,7 @@ class read_process_dir(QtCore.QThread):
                 mtzFile = None
                 mtzDBdict = {}
                 logFile = None
+                print(p)
                 for mtz in glob.glob(os.path.join(s,p,self.pipelineDict[p][0])):
                     db = fme_xtaltools.mtztools(mtz).get_info()
                     mtzFile = mtz
@@ -65,7 +69,8 @@ class read_results_dir(QtCore.QThread):
     def run(self):
         # first get samples from DB
 
-        self.parse_file_system()
+#        self.parse_file_system()
+        print('hallo')
 
 
 
@@ -73,14 +78,13 @@ class read_results_dir(QtCore.QThread):
 
 
 
-
-	x = xD[xD.rfind('/')+1:]
-	print x
-	for p in pipeline:
-		for l in glob.glob(os.path.join(xD,'*',p,'results','*noanom*log')):
-			if 'aimless' in l or 'autoPROC' in l:
-				print l
-#			print l.split('/')
+#	x = xD[xD.rfind('/')+1:]
+#	print x
+#	for p in pipeline:
+#		for l in glob.glob(os.path.join(xD,'*',p,'results','*noanom*log')):
+#			if 'aimless' in l or 'autoPROC' in l:
+#				print l
+##			print l.split('/')
 
 
 # /data/visitors/biomax/20200593/20200701/fragmax/process/Nsp5/Nsp5-JC039c1/Nsp5-JC039c1_1
@@ -97,5 +101,5 @@ class read_results_dir(QtCore.QThread):
 
 
 
-/data/visitors/biomax/20200593/20200701/fragmax/results/Nsp5-JC001a3_1/autoproc/buster/final.pdb
-/data/visitors/biomax/20200593/20200701/fragmax/results/Nsp5-JC001a3_1/autoproc/dimple/final.pdb
+#/data/visitors/biomax/20200593/20200701/fragmax/results/Nsp5-JC001a3_1/autoproc/buster/final.pdb
+#/data/visitors/biomax/20200593/20200701/fragmax/results/Nsp5-JC001a3_1/autoproc/dimple/final.pdb

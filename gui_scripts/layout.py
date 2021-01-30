@@ -9,9 +9,11 @@ class LayoutObjects():
         menu_bar = QtGui.QMenuBar()
         File = menu_bar.addMenu("File")
         File.addAction("Quit")
-        Datasource = menu_bar.addMenu("Datasource")
-        Datasource.addAction("Reload Samples From Datasource")
-        Datasource.addAction("Update datasource from file system")
+        Datasource = menu_bar.addMenu("&Datasource")
+        parse_process_dir = QtGui.QAction('&Read FragMAX directory', fme_object)
+        parse_process_dir.triggered.connect(fme_object.parse_process_directory)
+        Datasource.addAction(parse_process_dir)
+        # "Reload Samples From Datasource"
         return menu_bar
 
 
