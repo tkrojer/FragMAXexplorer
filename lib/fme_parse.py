@@ -74,8 +74,10 @@ class read_process_dir(QtCore.QThread):
                     db_dict['RefinementMTZ_latest'] = ref.replace('.pdb','.mtz')
                 pdbDict = fme_xtaltools.pdbtools(ref).get_refinement_stats_dict()
                 db_dict.update(pdbDict)
+                db_dict['DataProcessingScore'] = self.calculate_score(db_dict)
                 break
-            db_dict['DataProcessingScore'] = self.calculate_score(db_dict)
+            if not 'DataProcessingScore' in db_dict:
+                db_dict['DataProcessingScore'] = 0.0
             self.update_db(db_dict)
 
     def calculate_score(self,db_dict):
