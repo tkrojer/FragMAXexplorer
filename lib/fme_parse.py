@@ -82,11 +82,14 @@ class read_process_dir(QtCore.QThread):
 
     def calculate_score(self,db_dict):
         score = 0.0
-        score = (float(db_dict['DataProcessingUniqueReflectionsOverall']) *
-                 float(db_dict['DataProcessingCompletenessOverall']) *
-                 float(db_dict['DataProcessingIsigOverall']) *
-                 float(db_dict['DataProcessingNsymop']) ) / ( float(db_dict['DataProcessingUnitCellVolume']) *
-                                                              float(db_dict['RefinementRfree']))
+        try:
+            score = (float(db_dict['DataProcessingUniqueReflectionsOverall']) *
+                     float(db_dict['DataProcessingCompletenessOverall']) *
+                     float(db_dict['DataProcessingIsigOverall']) *
+                     float(db_dict['DataProcessingNsymop']) ) / ( float(db_dict['DataProcessingUnitCellVolume']) *
+                                                                  float(db_dict['RefinementRfree']))
+        except KeyError:
+            pass
         return score
 
     def update_db(self,db_dict):
