@@ -121,6 +121,7 @@ class select_highest_score(QtCore.QThread):
             dbList = self.db.get_dicts_for_xtal_from_plexTable_as_list(sample)
             tmpList = []
             for item in dbList:
+                print 'score',item['DataProcessingScore']
                 tmpList.append([item['CrystalName']+';'+item['DataCollectionRun']+';'+
                                 item['DataProcessingProgram']+';'+item['RefinementProgram'],
                                float(item['DataProcessingScore']) ] )
