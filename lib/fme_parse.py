@@ -133,9 +133,16 @@ class select_highest_score(QtCore.QThread):
         # select combination with highest score
             try:
                 best = max(tmpList, key=lambda x: x[1])
-                print best[0].split(';'), best[1]
+#                print best[0].split(';'), best[1]
+                run = best[0].split(';')[1]
+                proc = best[0].split(';')[2]
+                refine = best[0].split(';')[3]
+                db_dict = self.db.get_db_dict_for_sample_run_proc_refi_from_plexTable(sample,run,proc,refine)
+                print db_dict
             except ValueError:
                 pass
+
+
         # update mainTable
 
         # set symlinks

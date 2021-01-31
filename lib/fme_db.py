@@ -319,6 +319,31 @@ class data_source:
         return dbList
 
 
+    def get_db_dict_for_sample_run_proc_refi_from_plexTable(self,sampleID,run,proc,refine):
+        db_dict={}
+        header=[]
+        connect=sqlite3.connect(self.data_source_file)     # creates sqlite file if non existent
+        cursor = connect.cursor()
+#        cursor.execute("select * from plexTable where CrystalName='{0!s}';".format(sampleID))
+
+        sql = (
+            "select * from plexTable where CrystalName='{0!s}' ".format(sampleID) +
+            " and DataCollectionRun='{0!s}'".format(run) +
+            " and DataProcessingProgram='{0!s}'".format(proc) +
+            " and RefinementProgram='{0!s}'".format(refine)
+        )
+
+        cursor.execute(sql)
+        for column in cursor.description:
+            header.append(column[0])
+        data = cursor.fetchall()
+        try:
+            for n,item in enumerate(data[0]):
+                db_dict[header[n]]=str(item)
+        except IndexError:
+            pass
+        return db_dict
+
 
 
 
