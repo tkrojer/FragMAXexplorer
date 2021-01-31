@@ -26,7 +26,7 @@ class setup():
         fme_object.datasets_summary_table_columns = ['Sample ID',
                                                      'Resolution\nHigh',
                                                      'DataProcessing\nSpaceGroup',
-                                                     'DataProcessing\nRfree',
+                                                     'Refinement\nRfree',
                                                      'Rmerge\nLow'
                                                      ]
 
