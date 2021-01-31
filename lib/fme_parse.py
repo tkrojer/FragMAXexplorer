@@ -115,24 +115,25 @@ class select_highest_score(QtCore.QThread):
         allSamples = self.db.get_all_samples_in_plexTable_as_list()
 
         for sample in allSamples:
-            print(sample)
+#            print(sample)
             self.emit(QtCore.SIGNAL('update_status_bar(QString)'), 'scoring ' + sample)
             # ['xtal-run-proc-refi']
             dbList = self.db.get_dicts_for_xtal_from_plexTable_as_list(sample)
             tmpList = []
             for item in dbList:
-                print 'score',item['DataProcessingScore']
+#                print 'score',item['DataProcessingScore']
                 try:
                     tmpList.append([item['CrystalName']+';'+item['DataCollectionRun']+';'+
                                     item['DataProcessingProgram']+';'+item['RefinementProgram'],
                                    float(item['DataProcessingScore']) ] )
                 except ValueError:
-                    print item['CrystalName']+';'+item['DataCollectionRun']+';'+item['DataProcessingProgram']+';'+item['RefinementProgram']
+#                    print item['CrystalName']+';'+item['DataCollectionRun']+';'+item['DataProcessingProgram']+';'+item['RefinementProgram']
                     pass
-            print tmpList
+#            print tmpList
         # select combination with highest score
             try:
-                print max(tmpList, key=lambda x: x[1])
+                best = max(tmpList, key=lambda x: x[1])
+                print best[0].split(';'), best[1]
             except ValueError:
                 pass
         # update mainTable
