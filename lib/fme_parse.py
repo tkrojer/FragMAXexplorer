@@ -115,6 +115,7 @@ class select_highest_score(QtCore.QThread):
         allSamples = self.db.get_all_samples_in_data_source_as_list()
 
         for sample in allSamples:
+            print(sample)
             self.emit(QtCore.SIGNAL('update_status_bar(QString)'), 'scoring ' + sample)
             # ['xtal-run-proc-refi']
             dbList = self.db.get_dicts_for_xtal_from_plexTable_as_list(sample)
@@ -123,9 +124,12 @@ class select_highest_score(QtCore.QThread):
                 tmpList.append([item['CrystalName']+';'+item['DataCollectionRun']+';'+
                                 item['DataProcessingProgram']+';'+item['RefinementProgram'],
                                float(item['DataProcessingScore']) ] )
-
+            print tmpList
         # select combination with highest score
-            print max(tmpList, key=lambda x: x[1])
+            try:
+                print max(tmpList, key=lambda x: x[1])
+            except ValueError:
+                pass
         # update mainTable
 
         # set symlinks
