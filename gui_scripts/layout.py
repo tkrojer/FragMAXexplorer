@@ -18,6 +18,10 @@ class LayoutObjects():
         score_datasets.triggered.connect(fme_object.score_datasets)
         Datasource.addAction(score_datasets)
 
+        update_table = QtGui.QAction('&Update table from DB', fme_object)
+        update_table.triggered.connect(fme_object.populate_datasets_summary_table)
+        Datasource.addAction(update_table)
+
 
         # "Reload Samples From Datasource"
         return menu_bar

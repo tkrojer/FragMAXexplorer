@@ -24,7 +24,7 @@ class FragMAXexplorer(QtGui.QApplication):
 
         self.show_splash_screen()
 
-#        self.db = fme_db.data_source('/Users/tobiaskrojer/Scripts/FragMAXexplorer/lib/testx.sqlite')
+        self.db = fme_db.data_source('/home/tobkro/tmp/fme.sqlite')
 
         self.exec_()
 
