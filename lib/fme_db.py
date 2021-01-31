@@ -37,6 +37,7 @@ class data_source:
             ['DataProcessingProgram',                   'Program',                              'TEXT',                 1],
             ['DataProcessingPointGroup',                'DataProcessing\nPointGroup',           'TEXT',                 1],
             ['DataProcessingSpaceGroup',                'DataProcessing\nSpaceGroup',           'TEXT',                 1],
+            ['DataProcessingNsymop',                    'DataProcessing\nN(symop)',             'TEXT',                 1],
             ['DataProcessingUnitCell',                  'DataProcessing\nUnitCell',             'TEXT',                 0],
             ['DataProcessingUnitCellVolume',            'DataProcessing\nUnit Cell Volume',     'TEXT',                 0],
             ['DataProcessingLattice',                   'DataProcessing\nLattice',              'TEXT',                 0],
@@ -279,6 +280,33 @@ class data_source:
         return out_list
 
 
+    def get_all_samples_in_data_source_as_list(self):
+        connect=sqlite3.connect(self.data_source_file)     # creates sqlite file if non existent
+        cursor = connect.cursor()
+        cursor.execute("SELECT CrystalName FROM mainTable")
+        existing_samples_in_db=[]
+        samples = cursor.fetchall()
+        for sample in samples:
+            existing_samples_in_db.append(str(sample[0]))
+        return existing_samples_in_db
+
+
+
+    def get_dicts_for_xtal_from_plexTable_as_list(self,xtal):
+        dbList = []
+        header=[]
+        connect=sqlite3.connect(self.data_source_file)     # creates sqlite file if non existent
+        cursor = connect.cursor()
+        cursor.execute('select * from plexTable where CrystalName = "{0!s}"'.format(xtal))
+        for column in cursor.description:
+            header.append(column[0])
+        data = cursor.fetchall()
+        for result in data:
+            db_dict = {}
+            for n,item in enumerate(result):
+                db_dict[header[n]]=str(item)
+            dbList.append(db_dict)
+        return dbList
 
 
 
@@ -315,19 +343,6 @@ class data_source:
                 db_dict[column[0]]=''
         return db_dict
 
-
-
-
-
-    def get_all_samples_in_data_source_as_list(self):
-        connect=sqlite3.connect(self.data_source_file)     # creates sqlite file if non existent
-        cursor = connect.cursor()
-        cursor.execute("SELECT CrystalName FROM mainTable")
-        existing_samples_in_db=[]
-        samples = cursor.fetchall()
-        for sample in samples:
-            existing_samples_in_db.append(str(sample[0]))
-        return existing_samples_in_db
 
     def execute_statement(self,cmd):
         connect=sqlite3.connect(self.data_source_file)     # creates sqlite file if non existent
@@ -555,6 +570,10 @@ class data_source:
         for n, item in enumerate(data[0]):
             db_dict[header[n]] = str(item)
         return db_dict
+
+
+
+
 
 
 

@@ -67,15 +67,25 @@ class read_process_dir(QtCore.QThread):
     def parse_refinement_results(self,db_dict):
         for r in self.refi:
             db_dict['RefinementProgram'] = r
-            for ref in glob.glob(os.path.join(self.fragmaxDir,'results',db_dict['DataCollectionRun'],db_dict['DataProcessingProgram'],r,'final.pdb')):
+            for ref in glob.glob(os.path.join(self.fragmaxDir,'results',db_dict['DataCollectionRun'],
+                                              db_dict['DataProcessingProgram'],r,'final.pdb')):
                 db_dict['RefinementPDB_latest'] = ref
                 if os.path.isfile(ref.replace('.pdb','.mtz')):
                     db_dict['RefinementMTZ_latest'] = ref.replace('.pdb','.mtz')
                 pdbDict = fme_xtaltools.pdbtools(ref).get_refinement_stats_dict()
                 db_dict.update(pdbDict)
                 break
+            db_dict['DataProcessingScore'] = self.calculate_score(db_dict)
             self.update_db(db_dict)
 
+    def calculate_score(self,db_dict):
+        score = 0.0
+        score = (float(db_dict['DataProcessingUniqueReflectionsOverall']) *
+                 float(db_dict['DataProcessingCompletenessOverall']) *
+                 float(db_dict['DataProcessingIsigOverall']) *
+                 float(db_dict['DataProcessingNsymop']) ) / ( float(db_dict['DataProcessingUnitCellVolume']) *
+                                                              float(db_dict['RefinementRfree']))
+        return score
 
     def update_db(self,db_dict):
         print('hallo')
@@ -86,22 +96,35 @@ class read_process_dir(QtCore.QThread):
 
 
 
-class read_results_dir(QtCore.QThread):
+class select_highest_score(QtCore.QThread):
 
     def __init__(self,resultsDir,database,projectDir):
         QtCore.QThread.__init__(self)
         self.resultsDir =  resultsDir
         self.projectDir = projectDir
 
-        self.proc = ['autoproc', 'dials', 'edna', 'fastdp', 'xdsapp', 'xdsxscale']
-        self.refi = ['buster', 'dimple' ]
+        self.db = fme_db.data_source('/home/tobkro/tmp/fme.sqlite')
 
 
     def run(self):
         # first get samples from DB
+        allSamples = self.db.get_all_samples_in_data_source_as_list()
 
-#        self.parse_file_system()
-        print('hallo')
+        for sample in allSamples:
+            # ['xtal-run-proc-refi']
+            dbList = self.db.get_dicts_for_xtal_from_plexTable_as_list(sample)
+            tmpList = []
+            for item in dbList:
+                tmpList.append([item['CrystalName']+';'+item['DataCollectionRun']+';'+
+                                item['DataProcessingProgram']+';'+item['RefinementProgram'],
+                               float(item['DataProcessingScore']) ] )
+
+        # select combination with highest score
+        highestScoreDict = dbList[tmp.index(max(tmp))]
+
+        # update mainTable
+
+        # set symlinks
 
 
 

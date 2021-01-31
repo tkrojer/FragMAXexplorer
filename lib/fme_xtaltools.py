@@ -33,12 +33,14 @@ class mtztools(object):
             'DataProcessingUnitCell':       None,
             'DataProcessingUnitCellVolume': None,
             'DataProcessingLattice':        None,
-            'DataCollectionWavelength':     None
+            'DataCollectionWavelength':     None,
+            'DataProcessingNsymop':         None
         }
 
     def read_mtz_header(self):
         self.info['DataProcessingSpaceGroup'] = str(self.mtz.spacegroup.short_name())
         self.info['DataProcessingPointGroup'] = str(self.mtz.spacegroup.point_group_hm())
+        self.info['DataProcessingNsymop'] = str(self.mtz.nsymop)
         self.info['DataProcessingUnitCellVolume'] = str(self.mtz.cell.volume)
         self.info['DataProcessingLattice'] = str(self.mtz.spacegroup.crystal_system_str())
         self.info['DataCollectionWavelength'] = self.mtz.dataset(1).wavelength
