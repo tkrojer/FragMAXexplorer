@@ -290,6 +290,16 @@ class data_source:
             existing_samples_in_db.append(str(sample[0]))
         return existing_samples_in_db
 
+    def get_all_samples_in_plexTable_as_list(self):
+        connect=sqlite3.connect(self.data_source_file)     # creates sqlite file if non existent
+        cursor = connect.cursor()
+        cursor.execute("SELECT DISTINCT CrystalName FROM plexTable order by CrystalName")
+        existing_samples_in_db=[]
+        samples = cursor.fetchall()
+        for sample in samples:
+            existing_samples_in_db.append(str(sample[0]))
+        return existing_samples_in_db
+
 
 
     def get_dicts_for_xtal_from_plexTable_as_list(self,xtal):

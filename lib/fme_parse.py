@@ -112,7 +112,7 @@ class select_highest_score(QtCore.QThread):
 
     def run(self):
         # first get samples from DB
-        allSamples = self.db.get_all_samples_in_data_source_as_list()
+        allSamples = self.db.get_all_samples_in_plexTable_as_list()
 
         for sample in allSamples:
             print(sample)
