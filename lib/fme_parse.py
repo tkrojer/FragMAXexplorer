@@ -122,9 +122,13 @@ class select_highest_score(QtCore.QThread):
             tmpList = []
             for item in dbList:
                 print 'score',item['DataProcessingScore']
-                tmpList.append([item['CrystalName']+';'+item['DataCollectionRun']+';'+
-                                item['DataProcessingProgram']+';'+item['RefinementProgram'],
-                               float(item['DataProcessingScore']) ] )
+                try:
+                    tmpList.append([item['CrystalName']+';'+item['DataCollectionRun']+';'+
+                                    item['DataProcessingProgram']+';'+item['RefinementProgram'],
+                                   float(item['DataProcessingScore']) ] )
+                except ValueError:
+                    print item['CrystalName']+';'+item['DataCollectionRun']+';'+item['DataProcessingProgram']+';'+item['RefinementProgram']
+                    pass
             print tmpList
         # select combination with highest score
             try:
