@@ -13,6 +13,12 @@ class LayoutObjects():
         parse_process_dir = QtGui.QAction('&Read FragMAX directory', fme_object)
         parse_process_dir.triggered.connect(fme_object.parse_process_directory)
         Datasource.addAction(parse_process_dir)
+
+        score_datasets = QtGui.QAction('&Score auto-processing', fme_object)
+        score_datasets.triggered.connect(fme_object.score_datasets)
+        Datasource.addAction(score_datasets)
+
+
         # "Reload Samples From Datasource"
         return menu_bar
 

@@ -59,6 +59,16 @@ class FragMAXexplorer(QtGui.QApplication):
                          self.datasource_menu_reload_samples)
         self.work_thread.start()
 
+    def score_datasets(self):
+        d = '/data/visitors/biomax/20200592/20200618/fragmax'
+        self.work_thread = fme_parse.select_highest_score(d,'db','dir')
+        self.connect(self.work_thread, QtCore.SIGNAL("update_progress_bar"), self.update_progress_bar)
+        self.connect(self.work_thread, QtCore.SIGNAL("update_status_bar(QString)"), self.update_status_bar)
+        self.connect(self.work_thread, QtCore.SIGNAL("finished()"), self.thread_finished)
+        self.connect(self.work_thread, QtCore.SIGNAL("datasource_menu_reload_samples"),
+                         self.datasource_menu_reload_samples)
+        self.work_thread.start()
+
 
     def datasource_menu_reload_samples(self):
         print('hallo')

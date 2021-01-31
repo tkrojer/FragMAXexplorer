@@ -93,7 +93,6 @@ class read_process_dir(QtCore.QThread):
         return score
 
     def update_db(self,db_dict):
-        print('hallo')
         self.db.update_db('plexTable',db_dict)
 
     def copy_files(self):
@@ -116,6 +115,7 @@ class select_highest_score(QtCore.QThread):
         allSamples = self.db.get_all_samples_in_data_source_as_list()
 
         for sample in allSamples:
+            self.emit(QtCore.SIGNAL('update_status_bar(QString)'), 'scoring ' + sample)
             # ['xtal-run-proc-refi']
             dbList = self.db.get_dicts_for_xtal_from_plexTable_as_list(sample)
             tmpList = []
@@ -125,8 +125,7 @@ class select_highest_score(QtCore.QThread):
                                float(item['DataProcessingScore']) ] )
 
         # select combination with highest score
-        highestScoreDict = dbList[tmp.index(max(tmp))]
-
+            print max(tmpList, key=lambda x: x[1])
         # update mainTable
 
         # set symlinks
