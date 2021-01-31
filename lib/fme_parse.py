@@ -138,9 +138,12 @@ class select_highest_score(QtCore.QThread):
                 proc = best[0].split(';')[2]
                 refine = best[0].split(';')[3]
                 db_dict = self.db.get_db_dict_for_sample_run_proc_refi_from_plexTable(sample,run,proc,refine)
-                print db_dict
+                self.update_db(db_dict)
             except ValueError:
                 pass
+
+    def update_db(self,db_dict):
+        self.db.update_db('mainTable',db_dict)
 
 
         # update mainTable
