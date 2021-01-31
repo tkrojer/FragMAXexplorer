@@ -46,7 +46,7 @@ class LayoutObjects():
         fme_object.datasets_summary_table.setColumnCount(len(fme_object.datasets_summary_table_columns))
         fme_object.datasets_summary_table.setHorizontalHeaderLabels(fme_object.datasets_summary_table_columns)
         fme_object.datasets_summary_table.setSortingEnabled(True)
-        fme_object.datasets_summary_table.cellClicked.connect(xce_object.show_results_from_all_pipelines)
+#        fme_object.datasets_summary_table.cellClicked.connect(fme_object.show_results_from_all_pipelines)
         fme_object.main_tab_widget.addTab(fme_object.datasets_summary_table, "Datasets")
         fme_object.datasets_summary_table.show()
 
