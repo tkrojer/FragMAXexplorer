@@ -119,8 +119,8 @@ class read_process_dir(QtCore.QThread):
                     os.mkdir(db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'])
                 os.chdir(db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'])
                 print('copying ' + db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'])
-                shutil.copy(db_dict['DataProcessingPathToLogfile'], 'proc.log')
-                shutil.copy(db_dict['DataProcessingPathToMTZfile'], 'proc.mtz')
+                shutil.copy(db_dict['DataProcessingPathToLogfile'], db_dict['CrystalName'] + '.log')
+                shutil.copy(db_dict['DataProcessingPathToMTZfile'], db_dict['CrystalName'] + '.mtz')
                 shutil.copy(db_dict['RefinementPDB_latest'], 'refine.pdb')
                 shutil.copy(db_dict['RefinementMTZ_latest'], 'refine.mtz')
         except TypeError:
@@ -166,16 +166,24 @@ class select_highest_score(QtCore.QThread):
                 refine = best[0].split(';')[3]
                 db_dict = self.db.get_db_dict_for_sample_run_proc_refi_from_plexTable(sample,run,proc,refine)
                 self.update_db(db_dict)
+                self.set_symlinks(db_dict)
             except ValueError:
                 pass
 
     def update_db(self,db_dict):
         self.db.update_db('mainTable',db_dict)
 
-
-        # update mainTable
-
-        # set symlinks
+    def set_symlinks(self):
+        os.chdir(os.path.join(self.projectDir))
+        if os.path.islink('refine.pdb'):
+            os.unlink('refine.pdb')
+        if os.path.islink('refine.mtz'):
+            os.unlink('refine.mtz')
+        if os.path.islink(db_dict['CrystalName'] + '.log'):
+            os.unlink(db_dict['CrystalName'] + '.log')
+        if os.path.islink(db_dict['CrystalName'] + '.mtz'):
+            os.unlink(db_dict['CrystalName'] + '.mtz')
+        os.symlink(os.path.join('auto-processing',db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'],'*'),'.')
 
 
 
