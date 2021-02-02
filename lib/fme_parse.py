@@ -207,8 +207,8 @@ class select_highest_score(QtCore.QThread):
                 os.unlink(db_dict['CrystalName'] + '.log')
             if os.path.islink(db_dict['CrystalName'] + '.mtz'):
                 os.unlink(db_dict['CrystalName'] + '.mtz')
-            os.symlink(os.path.join('auto-processing',db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'],'refine.pdb'),'refine.pdb')
-            os.symlink(os.path.join('auto-processing',db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'],'refine.mtz'),'refine.mtz')
+            os.symlink(os.path.join('auto-processing',db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'],'init.pdb'),'init.pdb')
+            os.symlink(os.path.join('auto-processing',db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'],'init.mtz'),'init.mtz')
             os.symlink(os.path.join('auto-processing',db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'],db_dict['CrystalName'] + '.mtz'),db_dict['CrystalName'] + '.mtz')
             os.symlink(os.path.join('auto-processing',db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'],db_dict['CrystalName'] + '.log'),db_dict['CrystalName'] + '.log')
         except OSError:
