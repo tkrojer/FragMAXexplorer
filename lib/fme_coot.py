@@ -1,8 +1,12 @@
 import os
 import glob
+import sys
 
 import pygtk, gtk, pango
 import coot
+
+sys.path.append(os.getenv('FragMAXexplorer_DIR') + '/lib')
+import coot_utils_fme
 
 class GUI(object):
 
@@ -55,7 +59,7 @@ class GUI(object):
             self.index = len(self.Todo) - 1
 
         if len(molecule_number_list()) > 0:
-            for item in molecule_number_list():
+            for item in coot_utils_fme.molecule_number_list():
                 coot.close_molecule(item)
         coot.set_nomenclature_errors_on_read("ignore")
         coot.handle_read_draw_molecule_with_recentre(self.Todo[self.index][1], 0)

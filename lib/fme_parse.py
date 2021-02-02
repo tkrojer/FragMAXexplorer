@@ -220,6 +220,7 @@ class start_COOT(QtCore.QThread):
 
     def __init__(self,projectDir):
         QtCore.QThread.__init__(self)
+        self.settings = {}
         self.settings['projectDir'] = projectDir
 
     def run(self):
