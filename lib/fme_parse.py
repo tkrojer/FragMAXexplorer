@@ -96,6 +96,9 @@ class read_process_dir(QtCore.QThread):
                                                                   float(db_dict['RefinementRfree']))
         except KeyError:
             pass
+        except TypeError:
+            pass
+        
         return score
 
     def update_db(self,db_dict):
