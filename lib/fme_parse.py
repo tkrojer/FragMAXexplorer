@@ -10,10 +10,11 @@ import fme_db
 
 class read_process_dir(QtCore.QThread):
 
-    def __init__(self,fragmaxDir,database,projectDir):
+    def __init__(self,mainDir,database):
         QtCore.QThread.__init__(self)
-        self.fragmaxDir =  fragmaxDir
-        self.projectDir = projectDir
+        self.fragmaxDir = os.path.join(mainDir,'fragmax')
+        self.projectDir = os.path.join(mainDir,'fragmax','fme')
+
         self.db = fme_db.data_source('/home/tobkro/tmp/fme.sqlite')
 
         self.pipelineDict = {
@@ -119,10 +120,10 @@ class read_process_dir(QtCore.QThread):
 
 class select_highest_score(QtCore.QThread):
 
-    def __init__(self,resultsDir,database,projectDir):
+    def __init__(self,mainDir,database):
         QtCore.QThread.__init__(self)
-        self.resultsDir =  resultsDir
-        self.projectDir = projectDir
+        self.resultsDir = os.path.join(mainDir,'fragmax','results')
+        self.projectDir = os.path.join(mainDir,'fragmax','fme')
 
         self.db = fme_db.data_source('/home/tobkro/tmp/fme.sqlite')
 

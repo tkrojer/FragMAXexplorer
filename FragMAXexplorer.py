@@ -50,8 +50,8 @@ class FragMAXexplorer(QtGui.QApplication):
 
 
     def parse_process_directory(self):
-        d = '/data/visitors/biomax/20200592/20200618/fragmax'
-        self.work_thread = fme_parse.read_process_dir(d,'db','dir')
+        d = '/data/visitors/biomax/20200592/20200618'
+        self.work_thread = fme_parse.read_process_dir(d,'db')
         self.connect(self.work_thread, QtCore.SIGNAL("update_progress_bar"), self.update_progress_bar)
         self.connect(self.work_thread, QtCore.SIGNAL("update_status_bar(QString)"), self.update_status_bar)
         self.connect(self.work_thread, QtCore.SIGNAL("finished()"), self.thread_finished)
@@ -60,8 +60,8 @@ class FragMAXexplorer(QtGui.QApplication):
         self.work_thread.start()
 
     def score_datasets(self):
-        d = '/data/visitors/biomax/20200592/20200618/fragmax'
-        self.work_thread = fme_parse.select_highest_score(d,'db','dir')
+        d = '/data/visitors/biomax/20200592/20200618'
+        self.work_thread = fme_parse.select_highest_score(d,'db')
         self.connect(self.work_thread, QtCore.SIGNAL("update_progress_bar"), self.update_progress_bar)
         self.connect(self.work_thread, QtCore.SIGNAL("update_status_bar(QString)"), self.update_status_bar)
         self.connect(self.work_thread, QtCore.SIGNAL("finished()"), self.thread_finished)
