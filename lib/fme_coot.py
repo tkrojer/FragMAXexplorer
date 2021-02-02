@@ -77,7 +77,7 @@ class GUI(object):
         self.index += 1
         self.RefreshData()
 
-    def parseProjectDir(self, widget):
+    def parseProjectDir(self):
         for pdbFile in sorted(glob.glob(os.path.join(self.projectDir,'*','init.pdb'))):
             pdb = pdbFile.split('/')[len(pdbFile.split('/'))-1]
             pdbRoot = pdb.replace('.pdb','')
