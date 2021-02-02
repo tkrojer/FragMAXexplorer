@@ -42,7 +42,7 @@ class FragMAXexplorer(QtGui.QApplication):
 
     def start_coot(self):
         d = '/data/visitors/biomax/20200592/20200618/fragmax/fme'
-        self.work_thread = XChemThread.start_COOT(d)
+        self.work_thread = fme_parse.start_COOT(d)
         self.connect(self.work_thread, QtCore.SIGNAL("finished()"), self.thread_finished)
         self.work_thread.start()
 
