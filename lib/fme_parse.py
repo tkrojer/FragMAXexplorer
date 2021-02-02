@@ -112,7 +112,7 @@ class read_process_dir(QtCore.QThread):
                 if not os.path.isdir(db_dict['CrystalName']):
                     os.mkdir(db_dict['CrystalName'])
                 os.chdir(db_dict['CrystalName'])
-                if not os.path.isdir('autoproc'):
+                if not os.path.isdir('auto-processing'):
                     os.mkdir('auto-processing')
                 os.chdir('auto-processing')
                 if not os.path.isdir(db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram']):
