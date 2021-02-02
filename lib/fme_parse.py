@@ -122,8 +122,8 @@ class read_process_dir(QtCore.QThread):
                 print('copying ' + db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'])
                 shutil.copy(db_dict['DataProcessingPathToLogfile'], db_dict['CrystalName'] + '.log')
                 shutil.copy(db_dict['DataProcessingPathToMTZfile'], db_dict['CrystalName'] + '.mtz')
-                shutil.copy(db_dict['RefinementPDB_latest'], 'refine.pdb')
-                shutil.copy(db_dict['RefinementMTZ_latest'], 'refine.mtz')
+                shutil.copy(db_dict['RefinementPDB_latest'], 'init.pdb')
+                shutil.copy(db_dict['RefinementMTZ_latest'], 'init.mtz')
 
             # compound
             try:
@@ -218,12 +218,12 @@ class select_highest_score(QtCore.QThread):
 
 class start_COOT(QtCore.QThread):
 
-    def __init__(self,settings,interface):
+    def __init__(self,projectDir):
         QtCore.QThread.__init__(self)
-        self.settings=settings
+        self.settings['projectDir'] = projectDir
 
     def run(self):
         cwd=os.getcwd()
         # coot at Diamond always or sometimes at least open in home directory, so then it won't find the .pkl file
-        pickle.dump(self.settings,open(os.path.join(os.getenv('HOME'),'.xce_settings.pkl'),'wb'))
-        os.system('cd {0!s}\ncoot --no-guano --no-state-script --script {1!s}'.format(os.getenv('HOME'), os.path.join(os.getenv('XChemExplorer_DIR'),'lib',self.pylib)))
+        pickle.dump(self.settings,open(os.path.join(os.getenv('HOME'),'.fme_settings.pkl'),'wb'))
+        os.system('cd {0!s}\ncoot --no-guano --no-state-script --script {1!s}'.format(os.getenv('HOME'), os.path.join(os.getenv('FragMAXexplorer_DIR'),'lib','fme_coot.py')))
