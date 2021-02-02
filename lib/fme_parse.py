@@ -174,7 +174,7 @@ class select_highest_score(QtCore.QThread):
         self.db.update_db('mainTable',db_dict)
 
     def set_symlinks(self,db_dict):
-        os.chdir(os.path.join(self.projectDir))
+        os.chdir(os.path.join(self.projectDir,db_dict['CrystalName']))
         if os.path.islink('refine.pdb'):
             os.unlink('refine.pdb')
         if os.path.islink('refine.mtz'):
