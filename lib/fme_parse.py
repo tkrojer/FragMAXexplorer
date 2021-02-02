@@ -174,18 +174,21 @@ class select_highest_score(QtCore.QThread):
         self.db.update_db('mainTable',db_dict)
 
     def set_symlinks(self,db_dict):
-        os.chdir(os.path.join(self.projectDir,db_dict['CrystalName']))
-        print(os.path.join(self.projectDir,db_dict['CrystalName']))
-        if os.path.islink('refine.pdb'):
-            os.unlink('refine.pdb')
-        if os.path.islink('refine.mtz'):
-            os.unlink('refine.mtz')
-        if os.path.islink(db_dict['CrystalName'] + '.log'):
-            os.unlink(db_dict['CrystalName'] + '.log')
-        if os.path.islink(db_dict['CrystalName'] + '.mtz'):
-            os.unlink(db_dict['CrystalName'] + '.mtz')
-        os.symlink(os.path.join('auto-processing',db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'],'refine.pdb'),'refine.pdb')
-
+        try:
+            os.chdir(os.path.join(self.projectDir,db_dict['CrystalName']))
+            print(os.path.join(self.projectDir,db_dict['CrystalName']))
+            if os.path.islink('refine.pdb'):
+                os.unlink('refine.pdb')
+            if os.path.islink('refine.mtz'):
+                os.unlink('refine.mtz')
+            if os.path.islink(db_dict['CrystalName'] + '.log'):
+                os.unlink(db_dict['CrystalName'] + '.log')
+            if os.path.islink(db_dict['CrystalName'] + '.mtz'):
+                os.unlink(db_dict['CrystalName'] + '.mtz')
+            os.symlink(os.path.join('auto-processing',db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'],'refine.pdb'),'refine.pdb')
+        except OSError:
+            print('ERROR: directory does not exist ' + os.path.join(self.projectDir,db_dict['CrystalName']))
+            pass
 
 
 

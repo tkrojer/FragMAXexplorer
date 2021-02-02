@@ -101,10 +101,8 @@ class data_source:
         with connect:
             cursor = connect.cursor()
             for table in self.tableDict:
-                print table
                 cursor.execute("CREATE TABLE "+table+"("+self.tableDict[table][0][0]+' '+self.tableDict[table][0][2]+")")
                 for i in range(1,len(self.tableDict[table])):
-                    print self.tableDict[table][i][0]
                     cursor.execute("alter table "+table+" add column '"+self.tableDict[table][i][0]+"' '"+self.tableDict[table][i][2]+"'")
 
 
@@ -158,9 +156,7 @@ class data_source:
             value_string=''
             column_string=''
             for key in data_dict:
-                print key,data_dict[key]
                 if not key in columns_in_table:
-                    print 'oirfurughru'
                     continue
                 value = data_dict[key]
                 value_string += "'" + str(value) + "'" + ','
