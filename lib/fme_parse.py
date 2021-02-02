@@ -109,7 +109,7 @@ class read_process_dir(QtCore.QThread):
         if not os.path.isdir('autoproc'):
             os.mkdir('autoproc')
         os.chdir('autoproc')
-        if not os.path.isdir(db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'])
+        if not os.path.isdir(db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram']):
             os.mkdir(db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'])
         os.chdir(db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'])
             print 'a',db_dict['DataProcessingPathToLogfile']
