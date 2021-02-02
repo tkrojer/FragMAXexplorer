@@ -1,6 +1,7 @@
 import os
 import glob
 import sys
+import pickle
 
 import pygtk, gtk, pango
 import coot

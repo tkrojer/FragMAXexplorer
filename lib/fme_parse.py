@@ -1,6 +1,7 @@
 import os, glob
 import sys
 import shutil
+import pickle
 
 from PyQt4 import QtGui, QtCore
 
