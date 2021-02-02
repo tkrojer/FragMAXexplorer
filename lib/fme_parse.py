@@ -126,7 +126,7 @@ class read_process_dir(QtCore.QThread):
 
             # compound
             try:
-                compoundID = db_dict['CrystalName'].split([-][1])
+                compoundID = db_dict['CrystalName'].split('-')[1]
                 if not 'Apo' in compoundID:
                     os.chdir(os.path.join(self.projectDir,db_dict['CrystalName']))
                     if not os.path.isdir('ligand_files'):
@@ -138,7 +138,7 @@ class read_process_dir(QtCore.QThread):
                     if os.path.isfile(os.path.join(self.compoundDir,compoundID+'.pdb')):
                         if not os.path.isfile(compoundID+'.pdb'):
                             shutil.copy(os.path.join(self.compoundDir,compoundID+'.pdb'),compoundID+'.pdb')
-                            
+
             except IndexError:
                 pass
 
