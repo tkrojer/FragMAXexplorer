@@ -106,23 +106,26 @@ class read_process_dir(QtCore.QThread):
         self.db.update_db('plexTable',db_dict)
 
     def copy_files(self,db_dict):
-        if os.path.isfile(db_dict['DataProcessingPathToLogfile']) and os.path.isfile(db_dict['DataProcessingPathToMTZfile']) and os.path.isfile(db_dict['RefinementPDB_latest']) and os.path.isfile(db_dict['RefinementMTZ_latest']):
+        try:
+            if os.path.isfile(db_dict['DataProcessingPathToLogfile']) and os.path.isfile(db_dict['DataProcessingPathToMTZfile']) and os.path.isfile(db_dict['RefinementPDB_latest']) and os.path.isfile(db_dict['RefinementMTZ_latest']):
+                os.chdir(os.path.join(self.projectDir))
+                if not os.path.isdir(db_dict['CrystalName']):
+                    os.mkdir(db_dict['CrystalName'])
+                os.chdir(db_dict['CrystalName'])
+                if not os.path.isdir('autoproc'):
+                    os.mkdir('auto-processing')
+                os.chdir('auto-processing')
+                if not os.path.isdir(db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram']):
+                    os.mkdir(db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'])
+                os.chdir(db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'])
+                print('copying ' + db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'])
+                shutil.copy(db_dict['DataProcessingPathToLogfile'], 'proc.log')
+                shutil.copy(db_dict['DataProcessingPathToMTZfile'], 'proc.mtz')
+                shutil.copy(db_dict['RefinementPDB_latest'], 'refine.pdb')
+                shutil.copy(db_dict['RefinementMTZ_latest'], 'refine.mtz')
+        except TypeError:
+            pass
 
-            os.chdir(os.path.join(self.projectDir))
-            if not os.path.isdir(db_dict['CrystalName']):
-                os.mkdir(db_dict['CrystalName'])
-            os.chdir(db_dict['CrystalName'])
-            if not os.path.isdir('autoproc'):
-                os.mkdir('auto-processing')
-            os.chdir('auto-processing')
-            if not os.path.isdir(db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram']):
-                os.mkdir(db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'])
-            os.chdir(db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'])
-            print('copying ' + db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'])
-            shutil.copy(db_dict['DataProcessingPathToLogfile'], 'proc.log')
-            shutil.copy(db_dict['DataProcessingPathToMTZfile'], 'proc.mtz')
-            shutil.copy(db_dict['RefinementPDB_latest'], 'refine.pdb')
-            shutil.copy(db_dict['RefinementMTZ_latest'], 'refine.mtz')
 
 class select_highest_score(QtCore.QThread):
 
