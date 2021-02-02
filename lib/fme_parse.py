@@ -173,7 +173,7 @@ class select_highest_score(QtCore.QThread):
     def update_db(self,db_dict):
         self.db.update_db('mainTable',db_dict)
 
-    def set_symlinks(self):
+    def set_symlinks(self,db_dict):
         os.chdir(os.path.join(self.projectDir))
         if os.path.islink('refine.pdb'):
             os.unlink('refine.pdb')
