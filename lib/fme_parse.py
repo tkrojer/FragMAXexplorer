@@ -175,6 +175,7 @@ class select_highest_score(QtCore.QThread):
 
     def set_symlinks(self,db_dict):
         os.chdir(os.path.join(self.projectDir,db_dict['CrystalName']))
+        print(os.path.join(self.projectDir,db_dict['CrystalName']))
         if os.path.islink('refine.pdb'):
             os.unlink('refine.pdb')
         if os.path.islink('refine.mtz'):
@@ -183,7 +184,7 @@ class select_highest_score(QtCore.QThread):
             os.unlink(db_dict['CrystalName'] + '.log')
         if os.path.islink(db_dict['CrystalName'] + '.mtz'):
             os.unlink(db_dict['CrystalName'] + '.mtz')
-        os.symlink(os.path.join('auto-processing',db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'],'*'),'.')
+        os.symlink(os.path.join('auto-processing',db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'],'refine.pdb'),'refine.pdb')
 
 
 
