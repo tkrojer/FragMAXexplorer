@@ -36,7 +36,7 @@ class LayoutObjects():
         vbox_main.addWidget(menu_bar)
 
         # main tab widget
-        fme_object.main_tab_widget = QtGui.QTabWidget()
+#        fme_object.main_tab_widget = QtGui.QTabWidget()
 
         ## datasets
         fme_object.datasets_summary_table = QtGui.QTableWidget()
@@ -46,19 +46,22 @@ class LayoutObjects():
         fme_object.datasets_summary_table.setColumnCount(len(fme_object.datasets_summary_table_columns))
         fme_object.datasets_summary_table.setHorizontalHeaderLabels(fme_object.datasets_summary_table_columns)
         fme_object.datasets_summary_table.setSortingEnabled(True)
-#        fme_object.datasets_summary_table.cellClicked.connect(fme_object.show_results_from_all_pipelines)
-        fme_object.main_tab_widget.addTab(fme_object.datasets_summary_table, "Datasets")
-        fme_object.datasets_summary_table.show()
+        fme_object.datasets_summary_table.cellClicked.connect(fme_object.show_results_from_all_pipelines)
+#        fme_object.main_tab_widget.addTab(fme_object.datasets_summary_table, "Datasets")
+#        fme_object.datasets_summary_table.show()
+        vbox_main.addWidget(fme_object.datasets_summary_table)
 
         ## settings
-        fme_object.settings_container = QtGui.QWidget()
-        settings_vbox = QtGui.QVBoxLayout()
-        fme_object.projectDIRbutton = QtGui.QPushButton()
-        fme_object.projectDIRbutton.setText("select project directory")
-        fme_object.projectDIRbutton.clicked.connect(self.select_projectDIRbutton)
-        settings_vbox.addWidget(fme_object.projectDIRbutton)
-        fme_object.settings_container.setLayout(settings_vbox)
-        fme_object.main_tab_widget.addTab(fme_object.settings_container, "Settings")
+#        fme_object.settings_container = QtGui.QWidget()
+#        settings_vbox = QtGui.QVBoxLayout()
+#        fme_object.projectDIRbutton = QtGui.QPushButton()
+#        fme_object.projectDIRbutton.setText("select project directory")
+#        fme_object.projectDIRbutton.clicked.connect(self.select_projectDIRbutton)
+#        settings_vbox.addWidget(fme_object.projectDIRbutton)
+#        fme_object.settings_container.setLayout(settings_vbox)
+#        fme_object.main_tab_widget.addTab(fme_object.settings_container, "Settings")
+
+#        vbox_main.addStretch(-1)
 
         # status bar
         fme_object.status_bar = QtGui.QStatusBar()
@@ -69,9 +72,9 @@ class LayoutObjects():
         hbox_status = QtGui.QHBoxLayout()
         hbox_status.addWidget(fme_object.status_bar)
         hbox_status.addWidget(fme_object.progress_bar)
-        vbox_main.addWidget(fme_object.main_tab_widget)
-        fme_object.main_tab_widget.setMaximumSize(fme_object.screen.width(), fme_object.screen.height() - 245)
-        vbox_main.addWidget(fme_object.main_tab_widget)
+#        vbox_main.addWidget(fme_object.main_tab_widget)
+#        fme_object.main_tab_widget.setMaximumSize(fme_object.screen.width(), fme_object.screen.height() - 245)
+#        vbox_main.addWidget(fme_object.main_tab_widget)
         vbox_main.addLayout(hbox_status)
 
         fme_object.window.setLayout(vbox_main)

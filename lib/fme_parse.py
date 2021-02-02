@@ -29,7 +29,11 @@ class read_process_dir(QtCore.QThread):
 
 
     def run(self):
-        self.parse_file_system()
+
+        if os.path.isdir(self.projectDir):
+            self.parse_file_system()
+        else:
+            print('ERROR: please create project directory ' + self.projectDir)
 
     def parse_file_system(self):
         for s in sorted(glob.glob(os.path.join(self.fragmaxDir,'process','*','*','*','*'))):
@@ -79,6 +83,7 @@ class read_process_dir(QtCore.QThread):
             if not 'DataProcessingScore' in db_dict:
                 db_dict['DataProcessingScore'] = 0.0
             self.update_db(db_dict)
+            self.copy_files(db_dict)
 
     def calculate_score(self,db_dict):
         score = 0.0
@@ -95,9 +100,21 @@ class read_process_dir(QtCore.QThread):
     def update_db(self,db_dict):
         self.db.update_db('plexTable',db_dict)
 
-    def copy_files(self):
-        print('hallo')
-
+    def copy_files(self,db_dict):
+        os.chdir(os.path.join(self.projectDir))
+        if not os.path.isdir(db_dict['CrystalName']):
+            os.mkdir(db_dict['CrystalName'])
+        os.chdir(db_dict['CrystalName'])
+        if not os.path.isdir('autoproc'):
+            os.mkdir('autoproc')
+        os.chdir('autoproc')
+        if not os.path.isdir(db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'])
+            os.mkdir(db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'])
+        os.chdir(db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'])
+            print 'a',db_dict['DataProcessingPathToLogfile']
+            print 'b',db_dict['DataProcessingPathToMTZfile']
+            print 'c',db_dict['RefinementPDB_latest']
+            print 'd',db_dict['RefinementMTZ_latest']
 
 
 class select_highest_score(QtCore.QThread):

@@ -344,6 +344,21 @@ class data_source:
             pass
         return db_dict
 
+    def all_autoprocessing_results_for_xtal_as_dict(self,xtal):
+        dbList = []
+        header=[]
+        connect=sqlite3.connect(self.data_source_file)     # creates sqlite file if non existent
+        cursor = connect.cursor()
+        cursor.execute("select * from plexTable where CrystalName='{0!s}';".format(xtal))
+        for column in cursor.description:
+            header.append(column[0])
+        data = cursor.fetchall()
+        for result in data:
+            db_dict = {}
+            for n,item in enumerate(result):
+                db_dict[header[n]]=str(item)
+            dbList.append(db_dict)
+        return dbList
 
 
 

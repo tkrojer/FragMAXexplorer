@@ -24,8 +24,8 @@ class FragMAXexplorer(QtGui.QApplication):
 
         self.show_splash_screen()
 
-        self.db = fme_db.data_source('/home/tobkro/tmp/fme.sqlite')
-
+#        self.db = fme_db.data_source('/home/tobkro/tmp/fme.sqlite')
+        self.db = fme_db.data_source('/Users/tobiaskrojer/tmp/fme_update_4.sqlite')
         self.exec_()
 
     def start_gui(self):
@@ -76,15 +76,6 @@ class FragMAXexplorer(QtGui.QApplication):
     def populate_datasets_summary_table(self):
         self.status_bar.showMessage(
             'Building summary table for data processing results; be patient this may take a while')
-
-#        # get information about all samples collected during the current visit
-#        visit, beamline = XChemMain.getVisitAndBeamline(self.beamline_directory)
-#        if self.read_agamemnon.isChecked():
-#            visit = []
-#            for v in glob.glob(os.path.join(self.beamline_directory[:self.beamline_directory.rfind('-') + 1] + '*')):
-#                visit.append(v[v.rfind('/')+1:])
-
-#        self.update_log.insert('reading information about collected crystals from database...')
         collectedXtalsDict = self.db.xtals_in_db()
 
         # instead of using dictionaries, query table of which crystals are in table
@@ -137,21 +128,11 @@ class FragMAXexplorer(QtGui.QApplication):
 
             else:
                 cell_text = QtGui.QTableWidgetItem()
-                # in case data collection failed for whatever reason
                 try:
                     print('>>>',str(db_dict[header[1]]))
                     cell_text.setText(str(db_dict[header[1]]))
                 except KeyError:  # older pkl files may not have all the columns
                     cell_text.setText('n/a')
-                    #                        else:
-                    #                            if header[0].startswith('Resolution\n[Mn<I/sig(I)> = 1.5]'):
-                    #                                cell_text.setText('999')
-                    #                            elif header[0].startswith('DataProcessing\nRfree'):
-                    #                                cell_text.setText('999')
-                    #                            elif header[0].startswith('Rmerge\nLow'):
-                    #                                cell_text.setText('999')
-                    #                            else:
-                    #                                cell_text.setText('')
                 cell_text.setTextAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignCenter)
                 table.setItem(row, column, cell_text)
 
@@ -165,6 +146,91 @@ class FragMAXexplorer(QtGui.QApplication):
         self.explorer_active = 0
         self.update_progress_bar(0)
         self.update_status_bar('idle')
+
+
+
+    def show_results_from_all_pipelines(self):
+        selected_row=self.get_selected_row(self.datasets_summary_table)
+        xtal = self.datasets_summary_table.item(selected_row, 0).text()
+        # get details of currently selected autoprocessing result
+        selectedResultDict = self.db.get_db_dict_for_sample(xtal)
+
+        dbList=self.db.all_autoprocessing_results_for_xtal_as_dict(xtal)
+
+        self.make_data_collection_table()
+        self.msgBox = QtGui.QMessageBox()   # needs to be created here, otherwise the cellClicked function
+                                            # will reference it before it exists
+        for db_dict in dbList:
+            if str(db_dict['DataProcessingSpaceGroup']).lower() == 'null' or str(db_dict['DataProcessingSpaceGroup']).lower() == 'none':
+                continue
+            row = self.data_collection_table.rowCount()
+            self.data_collection_table.insertRow(row)
+            self.update_row_in_table(xtal, row, db_dict, self.data_collection_table, self.data_collection_table_columns)
+#            if selectedResultDict['DataCollectionVisit'] == db_dict['DataCollectionVisit'] \
+#                and selectedResultDict['DataCollectionRun'] == db_dict['DataCollectionRun'] \
+#                and selectedResultDict['DataProcessingProgram'] == db_dict['DataProcessingProgram']:
+#                self.current_row = row
+#                self.data_collection_table.selectRow(row)
+        self.data_collection_table.cellClicked.connect(self.select_different_autoprocessing_result)
+        self.data_collection_table_popup()
+
+    def get_selected_row(self,table):
+        indexes = table.selectionModel().selectedRows()
+        for index in sorted(indexes):
+            selected_row = index.row()
+        return selected_row
+
+    def make_data_collection_table(self):
+        # this creates a new table widget every time
+        # more elegant would be to delete or reset an existing widget...
+        self.data_collection_table = QtGui.QTableWidget()
+        self.data_collection_table.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.data_collection_table.setColumnCount(len(self.data_collection_table_columns))
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        self.data_collection_table.setFont(font)
+        self.data_collection_table.setHorizontalHeaderLabels(self.data_collection_table_columns)
+        self.data_collection_table.horizontalHeader().setFont(font)
+        self.data_collection_table.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
+
+    def select_different_autoprocessing_result(self):
+        selected_row=self.get_selected_row(self.data_collection_table)
+        if selected_row != self.current_row:
+            xtal =     self.data_collection_table.item(selected_row, 0).text()
+            visit =    self.data_collection_table.item(selected_row, 1).text()
+            run =      self.data_collection_table.item(selected_row, 2).text()
+            autoproc = self.data_collection_table.item(selected_row, 3).text()
+            # get db_dict from collectionTable for visit, run, autoproc
+            dbDict = self.db.get_db_dict_for_visit_run_autoproc(xtal,visit,run,autoproc)
+            dbDict['DataProcessingAutoAssigned'] = 'False'
+            self.update_log.insert('%s: changing selected autoprocessing result to %s %s %s' %(xtal,visit,run,autoproc))
+            # xtal is QString -> str(xtal)
+            XChemMain.linkAutoProcessingResult(str(xtal), dbDict, self.initial_model_directory,self.xce_logfile)
+            self.update_log.insert('%s: updating row in Datasets table' %xtal)
+            self.db.update_data_source(str(xtal),dbDict)
+            self.update_log.insert('%s: getting updated information from DB mainTable' %xtal)
+            dbDict = self.db.get_db_dict_for_sample(xtal)
+            row = self.get_row_of_sample_in_table(self.datasets_summary_table,xtal)
+            self.update_row_in_table(xtal, row, dbDict, self.datasets_summary_table,
+                                     self.datasets_summary_table_columns)
+        else:
+            print 'nothing to change'
+        self.msgBox.done(1)
+
+    def data_collection_table_popup(self):
+#        self.msgBox = QtGui.QMessageBox()
+        msgBoxLayout = self.msgBox.layout()
+        qWid = QtGui.QWidget()
+        qWid.setFixedWidth(3000)
+        qWid.setFixedHeight(500)
+        vbox = QtGui.QVBoxLayout()
+        vbox.addWidget(self.data_collection_table)
+        qWid.setLayout(vbox)
+#        msgBoxLayout.addLayout(vbox, 0, 0)
+        msgBoxLayout.addWidget(qWid)
+        self.msgBox.addButton(QtGui.QPushButton('Cancel'), QtGui.QMessageBox.RejectRole)
+        self.msgBox.resize(1000,200)
+        self.msgBox.exec_();
 
 
 
