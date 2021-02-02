@@ -16,7 +16,7 @@ class GUI(object):
         self.index = -1
         self.Todo = []
 
-        self.settings = pickle.load(open(".xce_settings.pkl", "rb"))
+        self.settings = pickle.load(open(".fme_settings.pkl", "rb"))
         self.projectDir = self.settings['projectDir']
 
         self.parseProjectDir()
