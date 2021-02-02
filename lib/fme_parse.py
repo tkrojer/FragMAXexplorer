@@ -123,8 +123,28 @@ class read_process_dir(QtCore.QThread):
                 shutil.copy(db_dict['DataProcessingPathToMTZfile'], db_dict['CrystalName'] + '.mtz')
                 shutil.copy(db_dict['RefinementPDB_latest'], 'refine.pdb')
                 shutil.copy(db_dict['RefinementMTZ_latest'], 'refine.mtz')
+
+            # compound
+            try:
+                compoundID = db_dict['CrystalName'].split([-][1])
+                if not 'Apo' in compoundID:
+                    os.chdir(os.path.join(self.projectDir,db_dict['CrystalName']))
+                    if not os.path.isdir('ligand_files'):
+                        os.mkdir('ligand_files')
+                    os.chdir('ligand_files')
+                    if os.path.isfile(os.path.join(self.compoundDir,compoundID+'.cif')):
+                        if not os.path.isfile(compoundID+'.cif'):
+                            shutil.copy(os.path.join(self.compoundDir,compoundID+'.cif'),compoundID+'.cif')
+                    if os.path.isfile(os.path.join(self.compoundDir,compoundID+'.pdb')):
+                        if not os.path.isfile(compoundID+'.pdb'):
+                            shutil.copy(os.path.join(self.compoundDir,compoundID+'.pdb'),compoundID+'.pdb')
+                            
+            except IndexError:
+                pass
+
         except TypeError:
             pass
+
 
 
 class select_highest_score(QtCore.QThread):
@@ -195,31 +215,14 @@ class select_highest_score(QtCore.QThread):
 
 
 
+class start_COOT(QtCore.QThread):
 
+    def __init__(self,settings,interface):
+        QtCore.QThread.__init__(self)
+        self.settings=settings
 
-
-#	x = xD[xD.rfind('/')+1:]
-#	print x
-#	for p in pipeline:
-#		for l in glob.glob(os.path.join(xD,'*',p,'results','*noanom*log')):
-#			if 'aimless' in l or 'autoPROC' in l:
-#				print l
-##			print l.split('/')
-
-
-# /data/visitors/biomax/20200593/20200701/fragmax/process/Nsp5/Nsp5-JC039c1/Nsp5-JC039c1_1
-#/data/visitors/biomax/20200593/20200701/fragmax/process/Nsp5/Nsp5-JC039c1/Nsp5-JC039c1_1/autoproc/aimless.log
-#/data/visitors/biomax/20200593/20200701/fragmax/process/Nsp5/Nsp5-JC039c1/Nsp5-JC039c1_1/edna/ep_Nsp5-JC039c1_1_aimless_noanom.log
-
-
-#            progress += progress_step
-#            self.emit(QtCore.SIGNAL('update_status_bar(QString)'), 'parsing auto-processing results for '+xtal)
-#            self.emit(QtCore.SIGNAL('update_progress_bar'), progress)#
-#        self.Logfile.insert('====== finished parsing beamline directory ======')
-#        self.emit(QtCore.SIGNAL('read_pinIDs_from_gda_logs'))
-#        self.emit(QtCore.SIGNAL("finished()"))
-
-
-
-#/data/visitors/biomax/20200593/20200701/fragmax/results/Nsp5-JC001a3_1/autoproc/buster/final.pdb
-#/data/visitors/biomax/20200593/20200701/fragmax/results/Nsp5-JC001a3_1/autoproc/dimple/final.pdb
+    def run(self):
+        cwd=os.getcwd()
+        # coot at Diamond always or sometimes at least open in home directory, so then it won't find the .pkl file
+        pickle.dump(self.settings,open(os.path.join(os.getenv('HOME'),'.xce_settings.pkl'),'wb'))
+        os.system('cd {0!s}\ncoot --no-guano --no-state-script --script {1!s}'.format(os.getenv('HOME'), os.path.join(os.getenv('XChemExplorer_DIR'),'lib',self.pylib)))

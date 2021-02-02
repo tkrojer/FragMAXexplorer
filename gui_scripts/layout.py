@@ -23,6 +23,13 @@ class LayoutObjects():
         Datasource.addAction(update_table)
 
 
+        Model = menu_bar.addMenu("&Model")
+        open_coot = QtGui.QAction('&Open COOT', fme_object)
+        open_coot.triggered.connect(fme_object.start_coot)
+        Model.addAction(open_coot)
+
+
+
         # "Reload Samples From Datasource"
         return menu_bar
 

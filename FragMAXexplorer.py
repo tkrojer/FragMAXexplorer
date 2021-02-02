@@ -39,6 +39,14 @@ class FragMAXexplorer(QtGui.QApplication):
 #        self.db = fme_db.data_source('/home/tobkro/tmp/fme.sqlite')
 #        self.populate_datasets_summary_table()
 
+
+    def start_coot(self):
+        self.work_thread = XChemThread.start_COOT(self.settings, interface)
+        self.connect(self.work_thread, QtCore.SIGNAL("finished()"), self.thread_finished)
+        self.work_thread.start()
+
+
+
     def show_splash_screen(self):
 
         splash_pix = QtGui.QPixmap(os.path.join(os.getenv('FragMAXexplorer_DIR'), 'img','fragmax_logo.png'))
