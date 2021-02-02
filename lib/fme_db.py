@@ -361,6 +361,13 @@ class data_source:
         return dbList
 
 
+    def get_empty_plexDict(self):
+        db_dict = {}
+        for item in self.data_collection_columns:
+            if not item[0] == 'ID':
+                db_dict[item[0]] = None
+        return db_dict
+
 
 
 

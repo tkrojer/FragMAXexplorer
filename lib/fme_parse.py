@@ -45,7 +45,7 @@ class read_process_dir(QtCore.QThread):
             xtal = s.split('/')[9]
             run =  s.split('/')[10]
 
-            db_dict = {}
+            db_dict = self.db.get_empty_plexDict()
             db_dict['DataProcessingProgram'] = autoproc_pipeline
             db_dict['ProteinName'] = protein
             db_dict['CrystalName'] = xtal
