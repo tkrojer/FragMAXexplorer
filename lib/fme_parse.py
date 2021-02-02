@@ -15,6 +15,7 @@ class read_process_dir(QtCore.QThread):
         QtCore.QThread.__init__(self)
         self.fragmaxDir = os.path.join(mainDir,'fragmax')
         self.projectDir = os.path.join(mainDir,'fragmax','fme')
+        self.compoundDir = os.path.join(mainDir,'fragmax','fragments')
 
         self.db = fme_db.data_source('/home/tobkro/tmp/fme.sqlite')
 
