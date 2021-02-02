@@ -63,7 +63,7 @@ class GUI(object):
             for item in coot_utils_fme.molecule_number_list():
                 coot.close_molecule(item)
         coot.set_nomenclature_errors_on_read("ignore")
-        coot.handle_read_draw_molecule_with_recentre(os.path.join(self.projectDir,self.Todo[self.index],'init.mtz'), 0)
+        coot.handle_read_draw_molecule_with_recentre(os.path.join(self.projectDir,self.Todo[self.index],'init.pdb'), 0)
         coot.auto_read_make_and_draw_maps(os.path.join(self.projectDir,self.Todo[self.index],'init.mtz'))
         self.current_folder_label.set_label(self.Todo[self.index])
 
