@@ -63,11 +63,9 @@ class GUI(object):
             for item in coot_utils_fme.molecule_number_list():
                 coot.close_molecule(item)
         coot.set_nomenclature_errors_on_read("ignore")
-        coot.handle_read_draw_molecule_with_recentre(self.Todo[self.index][1], 0)
-        coot.auto_read_make_and_draw_maps(self.Todo[self.index][2])
-        self.current_folder_label.set_label(self.Todo[self.index][0])
-        self.current_pdb_label.set_label(self.Todo[self.index][3])
-        self.current_mtz_label.set_label(self.Todo[self.index][4])
+        coot.handle_read_draw_molecule_with_recentre(self.projectDir,self.Todo[self.index],'init.mtz'), 0)
+        coot.auto_read_make_and_draw_maps(os.path.join(self.projectDir,self.Todo[self.index],'init.mtz'))
+        self.current_folder_label.set_label(self.Todo[self.index])
 
     def backward(self, widget):
         self.index -= 1
@@ -78,19 +76,10 @@ class GUI(object):
         self.RefreshData()
 
     def parseProjectDir(self):
-        print(os.path.join(self.projectDir,'*','init.pdb'))
         for pdbFile in sorted(glob.glob(os.path.join(self.projectDir,'*','init.pdb'))):
-            pdb = pdbFile.split('/')[len(pdbFile.split('/'))-1]
-            pdbRoot = pdb.replace('.pdb','')
-            folderName = pdbFile.split('/')[len(pdbFile.split('/'))-4]
-            print('checking folder {0!s}'.format(folderName))
-            if pdbRoot in typical_names:
-                if os.path.isfile(pdbFile.replace('.pdb','.mtz')):
-                    mtzFile = pdbFile.replace('.pdb','.mtz')
-                    mtz = pdb.replace('.pdb','.mtz')
-                    self.Todo.append([folderName,pdbFile,mtzFile,pdb,mtz])
-                    print('folder: {0!s} PDB: {1!s} MTZ: {2!s}'.format(folderName,pdbFile,mtzFile))
-                    continue
+            sampleID = pdbFile.split('/')[len(pdbFile.split('/'))-2]
+            print('checking folder {0!s}'.format(sampleID))
+            self.Todo.append(sampleID)
 
 
 
