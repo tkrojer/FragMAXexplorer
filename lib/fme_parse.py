@@ -106,10 +106,7 @@ class read_process_dir(QtCore.QThread):
         self.db.update_db('plexTable',db_dict)
 
     def copy_files(self,db_dict):
-        if os.path.isfile(db_dict['DataProcessingPathToLogfile']) and \
-            os.path.isfile(db_dict['DataProcessingPathToMTZfile']) and \
-            os.path.isfile(db_dict['RefinementPDB_latest']) and \
-            os.path.isfile(db_dict['RefinementMTZ_latest']):
+        if os.path.isfile(db_dict['DataProcessingPathToLogfile']) and os.path.isfile(db_dict['DataProcessingPathToMTZfile']) and os.path.isfile(db_dict['RefinementPDB_latest']) and os.path.isfile(db_dict['RefinementMTZ_latest']):
 
             os.chdir(os.path.join(self.projectDir))
             if not os.path.isdir(db_dict['CrystalName']):
