@@ -6,7 +6,10 @@ import pickle
 import pygtk, gtk, pango
 import coot
 
-sys.path.append(os.getenv('FragMAXexplorer_DIR') + '/lib')
+sys.path.append(os.path.join(os.getenv('CCP4'),'lib','py2'))
+import gemmi
+
+sys.path.append(os.path.join(os.getenv('FragMAXexplorer_DIR'),'/lib'))
 import coot_utils_fme
 
 class GUI(object):

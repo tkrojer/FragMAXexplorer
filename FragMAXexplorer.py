@@ -22,13 +22,22 @@ class FragMAXexplorer(QtGui.QApplication):
 
         set_stylesheet(self)
 
-        self.show_splash_screen()
+#        self.show_splash_screen()
 
-        self.db = fme_db.data_source('/home/tobkro/tmp/fme.sqlite')
+#        self.projectDir = '/data/visitors/biomax/20200593/20210223'
+#        print('hallooooooo')
+#        self.dbFile = '/home/tobkro/tmp/fme.sqlite'
+#        self.db = fme_db.data_source('/home/tobkro/tmp/fme.sqlite')
 #        self.db = fme_db.data_source('/Users/tobiaskrojer/tmp/fme_update_4.sqlite')
         self.exec_()
 
     def start_gui(self):
+
+        self.projectDir = '/data/visitors/biomax/20200593/20210223'
+        self.dbFile = os.path.join(self.projectDir,'fragmax','db','nsp10.sqlite')
+#        self.dbFile = '/Users/tobiaskrojer/tmp/tmp.sqlite'
+        self.db = fme_db.data_source(self.dbFile)
+
 
         setup().settings(self)
         setup().tables(self)
@@ -41,8 +50,7 @@ class FragMAXexplorer(QtGui.QApplication):
 
 
     def start_coot(self):
-        d = '/data/visitors/biomax/20200592/20200618/fragmax/fme'
-        self.work_thread = fme_parse.start_COOT(d)
+        self.work_thread = fme_parse.start_COOT(self.projectDir)
         self.connect(self.work_thread, QtCore.SIGNAL("finished()"), self.thread_finished)
         self.work_thread.start()
 
@@ -59,8 +67,7 @@ class FragMAXexplorer(QtGui.QApplication):
 
 
     def parse_process_directory(self):
-        d = '/data/visitors/biomax/20200592/20200618'
-        self.work_thread = fme_parse.read_process_dir(d,'db')
+        self.work_thread = fme_parse.read_process_dir(self.projectDir, self.dbFile)
         self.connect(self.work_thread, QtCore.SIGNAL("update_progress_bar"), self.update_progress_bar)
         self.connect(self.work_thread, QtCore.SIGNAL("update_status_bar(QString)"), self.update_status_bar)
         self.connect(self.work_thread, QtCore.SIGNAL("finished()"), self.thread_finished)
@@ -69,8 +76,13 @@ class FragMAXexplorer(QtGui.QApplication):
         self.work_thread.start()
 
     def score_datasets(self):
-        d = '/data/visitors/biomax/20200592/20200618'
-        self.work_thread = fme_parse.select_highest_score(d,'db')
+        self.select_datasets('score')
+
+    def select_ap_dimple(self):
+        self.select_datasets('ap_dimple')
+
+    def select_datasets(self, selection):
+        self.work_thread = fme_parse.select_highest_score(self.projectDir, self.dbFile, selection)
         self.connect(self.work_thread, QtCore.SIGNAL("update_progress_bar"), self.update_progress_bar)
         self.connect(self.work_thread, QtCore.SIGNAL("update_status_bar(QString)"), self.update_status_bar)
         self.connect(self.work_thread, QtCore.SIGNAL("finished()"), self.thread_finished)

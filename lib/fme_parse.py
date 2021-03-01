@@ -12,13 +12,13 @@ import fme_db
 
 class read_process_dir(QtCore.QThread):
 
-    def __init__(self,mainDir,database):
+    def __init__(self, mainDir, dbFile):
         QtCore.QThread.__init__(self)
         self.fragmaxDir = os.path.join(mainDir,'fragmax')
         self.projectDir = os.path.join(mainDir,'fragmax','fme')
         self.compoundDir = os.path.join(mainDir,'fragmax','fragments')
 
-        self.db = fme_db.data_source('/home/tobkro/tmp/fme.sqlite')
+        self.db = fme_db.data_source(dbFile)
 
         self.pipelineDict = {
             'autoproc':     ['truncate-unique.mtz', 'aimless.log'],
@@ -151,19 +151,43 @@ class read_process_dir(QtCore.QThread):
 
 class select_highest_score(QtCore.QThread):
 
-    def __init__(self,mainDir,database):
+    def __init__(self, mainDir, dbFile, selection):
         QtCore.QThread.__init__(self)
         self.resultsDir = os.path.join(mainDir,'fragmax','results')
         self.projectDir = os.path.join(mainDir,'fragmax','fme')
 
-        self.db = fme_db.data_source('/home/tobkro/tmp/fme.sqlite')
+        self.db = fme_db.data_source(dbFile)
 
+        self.selection = selection
 
     def run(self):
-        # first get samples from DB
-        allSamples = self.db.get_all_samples_in_plexTable_as_list()
 
-        for sample in allSamples:
+        # first get samples from DB
+        self.allSamples = self.db.get_all_samples_in_plexTable_as_list()
+
+        if self.selection == 'score':
+            self.highest_score()
+        elif self.selection == 'ap_dimple':
+            self.ap_dimple()
+
+    def ap_dimple(self):
+        for sample in self.allSamples:
+            self.unset_symlinks(sample)
+#            print(sample)
+            self.emit(QtCore.SIGNAL('update_status_bar(QString)'), 'selecting ' + sample)
+            # ['xtal-run-proc-refi']
+            dbList = self.db.get_dicts_for_xtal_from_plexTable_as_list(sample)
+            for item in dbList:
+                if item['DataProcessingProgram'] == 'autoproc' and item['RefinementProgram'] == 'dimple':
+                    db_dict = self.db.get_db_dict_for_sample_run_proc_refi_from_plexTable(sample,run,proc,refine)
+                    self.update_db(db_dict)
+                    self.set_symlinks(db_dict)
+
+
+    def highest_score(self):
+
+        for sample in self.allSamples:
+            self.unset_symlinks(sample)
 #            print(sample)
             self.emit(QtCore.SIGNAL('update_status_bar(QString)'), 'scoring ' + sample)
             # ['xtal-run-proc-refi']
@@ -195,10 +219,10 @@ class select_highest_score(QtCore.QThread):
     def update_db(self,db_dict):
         self.db.update_db('mainTable',db_dict)
 
-    def set_symlinks(self,db_dict):
+    def unset_symlinks(self, sample):
         try:
-            os.chdir(os.path.join(self.projectDir,db_dict['CrystalName']))
-            print(os.path.join(self.projectDir,db_dict['CrystalName']))
+            os.chdir(os.path.join(self.projectDir,sample))
+            print(os.path.join(self.projectDir,sample))
             if os.path.islink('refine.pdb'):
                 os.unlink('refine.pdb')
             if os.path.islink('refine.mtz'):
@@ -207,6 +231,15 @@ class select_highest_score(QtCore.QThread):
                 os.unlink(db_dict['CrystalName'] + '.log')
             if os.path.islink(db_dict['CrystalName'] + '.mtz'):
                 os.unlink(db_dict['CrystalName'] + '.mtz')
+        except OSError:
+            print('ERROR: directory does not exist ' + os.path.join(self.projectDir,sample))
+            pass
+
+
+
+    def set_symlinks(self,db_dict):
+        try:
+            os.chdir(os.path.join(self.projectDir,db_dict['CrystalName']))
             os.symlink(os.path.join('auto-processing',db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'],'init.pdb'),'init.pdb')
             os.symlink(os.path.join('auto-processing',db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'],'init.mtz'),'init.mtz')
             os.symlink(os.path.join('auto-processing',db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'],db_dict['CrystalName'] + '.mtz'),db_dict['CrystalName'] + '.mtz')
@@ -222,7 +255,7 @@ class start_COOT(QtCore.QThread):
     def __init__(self,projectDir):
         QtCore.QThread.__init__(self)
         self.settings = {}
-        self.settings['projectDir'] = projectDir
+        self.settings['projectDir'] = os.path.join(projectDir,'fragmax','fme')
 
     def run(self):
         cwd=os.getcwd()
