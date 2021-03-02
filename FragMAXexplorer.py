@@ -33,9 +33,20 @@ class FragMAXexplorer(QtGui.QApplication):
 
     def start_gui(self):
 
-        self.projectDir = '/data/visitors/biomax/20200593/20210223'
-        self.dbFile = os.path.join(self.projectDir,'fragmax','db','nsp10.sqlite')
+        try:
+            self.projectDir = sys.argv[1]
+        except IndexError:
+            print('ERROR: please specify project directory')
+            quit()
+
+#        self.projectDir = '/data/visitors/biomax/20200593/20210223'
+#        self.dbFile = os.path.join(self.projectDir,'fragmax','db','nsp10.sqlite')
 #        self.dbFile = '/Users/tobiaskrojer/tmp/tmp.sqlite'
+        self.dbFile = os.path.join(self.projectDir,'fragmax','db','fme.sqlite')
+        if not os.path.isfile(self.dbFile):
+            print('ERROR: should be here ' + self.dbFile)
+            quit()
+
         self.db = fme_db.data_source(self.dbFile)
 
 
