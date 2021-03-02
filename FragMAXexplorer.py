@@ -42,7 +42,7 @@ class FragMAXexplorer(QtGui.QApplication):
 #        self.projectDir = '/data/visitors/biomax/20200593/20210223'
 #        self.dbFile = os.path.join(self.projectDir,'fragmax','db','nsp10.sqlite')
 #        self.dbFile = '/Users/tobiaskrojer/tmp/tmp.sqlite'
-        self.dbFile = os.path.join(self.projectDir,'fragmax','db','fme.sqlite')
+        self.dbFile = os.path.join(self.projectDir,'db','fme.sqlite')
         if not os.path.isfile(self.dbFile):
             print('ERROR: should be here ' + self.dbFile)
             quit()

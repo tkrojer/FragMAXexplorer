@@ -14,9 +14,13 @@ class read_process_dir(QtCore.QThread):
 
     def __init__(self, mainDir, dbFile):
         QtCore.QThread.__init__(self)
-        self.fragmaxDir = os.path.join(mainDir,'fragmax')
-        self.projectDir = os.path.join(mainDir,'fragmax','fme')
-        self.compoundDir = os.path.join(mainDir,'fragmax','fragments')
+#        self.fragmaxDir = os.path.join(mainDir,'fragmax')
+#        self.projectDir = os.path.join(mainDir,'fragmax','fme')
+#        self.compoundDir = os.path.join(mainDir,'fragmax','fragments')
+
+        self.fragmaxDir = mainDir
+        self.projectDir = os.path.join(mainDir,'fme')
+        self.compoundDir = os.path.join(mainDir,'fragments')
 
         self.db = fme_db.data_source(dbFile)
 
@@ -153,8 +157,11 @@ class select_highest_score(QtCore.QThread):
 
     def __init__(self, mainDir, dbFile, selection):
         QtCore.QThread.__init__(self)
-        self.resultsDir = os.path.join(mainDir,'fragmax','results')
-        self.projectDir = os.path.join(mainDir,'fragmax','fme')
+#        self.resultsDir = os.path.join(mainDir,'fragmax','results')
+#        self.projectDir = os.path.join(mainDir,'fragmax','fme')
+
+        self.resultsDir = os.path.join(mainDir,'results')
+        self.projectDir = os.path.join(mainDir,'fme')
 
         self.db = fme_db.data_source(dbFile)
 
@@ -255,7 +262,8 @@ class start_COOT(QtCore.QThread):
     def __init__(self,projectDir):
         QtCore.QThread.__init__(self)
         self.settings = {}
-        self.settings['projectDir'] = os.path.join(projectDir,'fragmax','fme')
+#        self.settings['projectDir'] = os.path.join(projectDir,'fragmax','fme')
+        self.settings['projectDir'] = os.path.join(projectDir,'fme')
 
     def run(self):
         cwd=os.getcwd()
