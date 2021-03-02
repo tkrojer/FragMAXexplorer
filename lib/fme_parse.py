@@ -234,10 +234,10 @@ class select_highest_score(QtCore.QThread):
                 os.unlink('refine.pdb')
             if os.path.islink('refine.mtz'):
                 os.unlink('refine.mtz')
-            if os.path.islink(db_dict['CrystalName'] + '.log'):
-                os.unlink(db_dict['CrystalName'] + '.log')
-            if os.path.islink(db_dict['CrystalName'] + '.mtz'):
-                os.unlink(db_dict['CrystalName'] + '.mtz')
+            if os.path.islink(sample + '.log'):
+                os.unlink(sample + '.log')
+            if os.path.islink(sample + '.mtz'):
+                os.unlink(sample + '.mtz')
         except OSError:
             print('ERROR: directory does not exist ' + os.path.join(self.projectDir,sample))
             pass
