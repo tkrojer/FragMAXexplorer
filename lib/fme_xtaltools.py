@@ -27,15 +27,26 @@ class mtztools(object):
         except RuntimeError:
             pass
 
+#        self.info = {
+#            'DataProcessingPointGroup':     None,
+#            'DataProcessingSpaceGroup':     None,
+#            'DataProcessingUnitCell':       None,
+#            'DataProcessingUnitCellVolume': None,
+#            'DataProcessingLattice':        None,
+#            'DataCollectionWavelength':     None,
+#            'DataProcessingNsymop':         None
+#        }
+
         self.info = {
-            'DataProcessingPointGroup':     None,
-            'DataProcessingSpaceGroup':     None,
-            'DataProcessingUnitCell':       None,
-            'DataProcessingUnitCellVolume': None,
-            'DataProcessingLattice':        None,
-            'DataCollectionWavelength':     None,
-            'DataProcessingNsymop':         None
+            'DataProcessingPointGroup':     '',
+            'DataProcessingSpaceGroup':     '',
+            'DataProcessingUnitCell':       '',
+            'DataProcessingUnitCellVolume': '',
+            'DataProcessingLattice':        '',
+            'DataCollectionWavelength':     '',
+            'DataProcessingNsymop':         ''
         }
+
 
     def read_mtz_header(self):
         self.info['DataProcessingSpaceGroup'] = str(self.mtz.spacegroup.short_name())
@@ -60,28 +71,51 @@ class logtools(object):
     def __init__(self,logfile):
         self.logfile = logfile
 
-        self.aimless = {    'DataProcessingResolutionLow':                  None,
-                            'DataProcessingResolutionLowInnerShell':        None,
-                            'DataProcessingResolutionHigh':                 None,
-                            'DataProcessingResolutionHighOuterShell':       None,
-                            'DataProcessingRmergeOverall':                  None,
-                            'DataProcessingRmergeLow':                      None,
-                            'DataProcessingRmergeHigh':                     None,
-                            'DataProcessingIsigOverall':                    None,
-                            'DataProcessingIsigLow':                        None,
-                            'DataProcessingIsigHigh':                       None,
-                            'DataProcessingCompletenessOverall':            None,
-                            'DataProcessingCompletenessLow':                None,
-                            'DataProcessingCompletenessHigh':               None,
-                            'DataProcessingMultiplicityOverall':            None,
-                            'DataProcessingMultiplicityLow':                None,
-                            'DataProcessingMultiplicityHigh':               None,
-                            'DataProcessingCChalfOverall':                  None,
-                            'DataProcessingCChalfLow':                      None,
-                            'DataProcessingCChalfHigh':                     None,
-                            'DataProcessingUniqueReflectionsLow':           None,
-                            'DataProcessingUniqueReflectionsHigh':          None,
-                            'DataProcessingUniqueReflectionsOverall':       None          }
+#        self.aimless = {    'DataProcessingResolutionLow':                  None,
+#                            'DataProcessingResolutionLowInnerShell':        None,
+#                            'DataProcessingResolutionHigh':                 None,
+#                            'DataProcessingResolutionHighOuterShell':       None,
+#                            'DataProcessingRmergeOverall':                  None,
+#                            'DataProcessingRmergeLow':                      None,
+#                            'DataProcessingRmergeHigh':                     None,
+#                            'DataProcessingIsigOverall':                    None,
+#                            'DataProcessingIsigLow':                        None,
+#                            'DataProcessingIsigHigh':                       None,
+#                            'DataProcessingCompletenessOverall':            None,
+#                            'DataProcessingCompletenessLow':                None,
+#                            'DataProcessingCompletenessHigh':               None,
+#                            'DataProcessingMultiplicityOverall':            None,
+#                            'DataProcessingMultiplicityLow':                None,
+#                            'DataProcessingMultiplicityHigh':               None,
+#                            'DataProcessingCChalfOverall':                  None,
+#                            'DataProcessingCChalfLow':                      None,
+#                            'DataProcessingCChalfHigh':                     None,
+#                            'DataProcessingUniqueReflectionsLow':           None,
+#                            'DataProcessingUniqueReflectionsHigh':          None,
+#                            'DataProcessingUniqueReflectionsOverall':       None          }
+
+        self.aimless = {    'DataProcessingResolutionLow':                  '',
+                            'DataProcessingResolutionLowInnerShell':        '',
+                            'DataProcessingResolutionHigh':                 '',
+                            'DataProcessingResolutionHighOuterShell':       '',
+                            'DataProcessingRmergeOverall':                  '',
+                            'DataProcessingRmergeLow':                      '',
+                            'DataProcessingRmergeHigh':                     '',
+                            'DataProcessingIsigOverall':                    '',
+                            'DataProcessingIsigLow':                        '',
+                            'DataProcessingIsigHigh':                       '',
+                            'DataProcessingCompletenessOverall':            '',
+                            'DataProcessingCompletenessLow':                '',
+                            'DataProcessingCompletenessHigh':               '',
+                            'DataProcessingMultiplicityOverall':            '',
+                            'DataProcessingMultiplicityLow':                '',
+                            'DataProcessingMultiplicityHigh':               '',
+                            'DataProcessingCChalfOverall':                  '',
+                            'DataProcessingCChalfLow':                      '',
+                            'DataProcessingCChalfHigh':                     '',
+                            'DataProcessingUniqueReflectionsLow':           '',
+                            'DataProcessingUniqueReflectionsHigh':          '',
+                            'DataProcessingUniqueReflectionsOverall':       ''          }
 
 
 
