@@ -393,6 +393,7 @@ class read_dimple(QtCore.QThread):
                 db_dict['RefinementMTZ_latest'] = os.path.join(s,'dimple','final.mtz')
                 pdbDict = fme_xtaltools.pdbtools(os.path.join(s,'dimple','final.pdb')).get_refinement_stats_dict()
                 runs = self.db.runs_of_crystal_in_plexTable(x)
+                print('runs', runs)
                 for r in runs:
                     db_dict['DataCollectionRun'] = r
                     db_dict['DataProcessingProgram'] = 'autoproc'
