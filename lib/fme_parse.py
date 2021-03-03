@@ -294,6 +294,7 @@ class select_highest_score(QtCore.QThread):
         # select combination with highest score
             try:
                 print('>>>>>>>> scoring')
+                print(str(tmpList))
                 best = max(tmpList, key=lambda x: x[1])
                 run = best[0].split(';')[1]
                 proc = best[0].split(';')[2]
