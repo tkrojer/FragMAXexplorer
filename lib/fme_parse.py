@@ -45,6 +45,7 @@ class read_process_dir(QtCore.QThread):
             print('ERROR: please create project directory ' + self.projectDir)
 
     def parse_file_system(self):
+        out = ''
         for s in sorted(glob.glob(os.path.join(self.fragmaxDir,'process','*','*','*','*'))):
             autoproc_pipeline = s.split('/')[11]
             if not autoproc_pipeline in self.pipelineDict:
@@ -52,6 +53,8 @@ class read_process_dir(QtCore.QThread):
             protein = s.split('/')[8]
             xtal = s.split('/')[9]
             run =  s.split('/')[10]
+
+            out += xtal + '\n'
 
             db_dict = self.db.get_empty_plexDict()
             db_dict['DataProcessingProgram'] = autoproc_pipeline
@@ -63,11 +66,13 @@ class read_process_dir(QtCore.QThread):
             mtzDBdict = {}
             logFile = None
             for mtz in glob.glob(os.path.join(s,self.pipelineDict[autoproc_pipeline][0])):
+                out += 'mtz: ' + mtz + '\n'
                 mtzDict = fme_xtaltools.mtztools(mtz).read_mtz_header()
                 db_dict.update(mtzDict)
                 db_dict['DataProcessingPathToMTZfile'] = mtz
                 break
             for log in glob.glob(os.path.join(s,self.pipelineDict[autoproc_pipeline][1])):
+                out += 'log: ' +log + '\n'
                 if log.endswith('.log'):
                     logDict = fme_xtaltools.logtools(log).read_aimless()
                 elif log.endswith('.json'):
@@ -76,6 +81,9 @@ class read_process_dir(QtCore.QThread):
                 db_dict['DataProcessingPathToLogfile'] = log
                 break
             self.parse_refinement_results(db_dict)
+        f = open('out.txt','w')
+        f.write(out)
+        f.close()
 
     def parse_refinement_results(self,db_dict):
         for r in self.refi:
