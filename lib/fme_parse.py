@@ -126,7 +126,8 @@ class read_process_dir(QtCore.QThread):
             pass
         except ValueError:
             pass
-
+        print('score',score)
+        quit()
         return score
 
     def calculate_processing_score(self,db_dict):
