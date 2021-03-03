@@ -248,7 +248,7 @@ class select_highest_score(QtCore.QThread):
 #            print(str(dbList))
             tmpList = []
             for item in dbList:
-                print(item)
+                print(item['CrystalName'],item['DataProcessingProgram'])
                 print('>>>>>>>')
                 if item['DataProcessingProgram'] == 'autoproc':
                     try:
