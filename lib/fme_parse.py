@@ -248,12 +248,12 @@ class select_highest_score(QtCore.QThread):
 #            print(str(dbList))
             tmpList = []
             for item in dbList:
-                print(item['CrystalName'],item['DataProcessingProgram']),item['DataCollectionRun'],item['DataProcessingScore']
+                print(item['CrystalName'],item['DataProcessingProgram'],item['DataCollectionRun'],item['DataProcessingScore'],item['RefinementProgram'])
                 print('>>>>>>>')
                 if item['DataProcessingProgram'] == 'autoproc':
                     try:
                         tmpList.append([item['CrystalName']+';'+item['DataCollectionRun']+';'+
-                                        item['DataProcessingProgram']+';'+item[' '],
+                                        item['DataProcessingProgram']+';'+item['RefinementProgram'],
                                        float(item['DataProcessingScore']) ] )
                     except ValueError:
 #                    print item['CrystalName']+';'+item['DataCollectionRun']+';'+item['DataProcessingProgram']+';'+item['RefinementProgram']
