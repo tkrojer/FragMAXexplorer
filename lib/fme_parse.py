@@ -82,7 +82,7 @@ class read_process_dir(QtCore.QThread):
                 db_dict.update(logDict)
                 db_dict['DataProcessingPathToLogfile'] = log
                 break
-            db_dict['DataProcessingRefinementScore'] = self.calculate_score(db_dict)
+            db_dict['DataProcessingScore'] = self.calculate_processing_score(db_dict)
 
             out = self.parse_refinement_results(db_dict, out)
         print('>>> writing logfile')
@@ -104,7 +104,7 @@ class read_process_dir(QtCore.QThread):
                     db_dict['RefinementMTZ_latest'] = ref.replace('.pdb','.mtz')
                 pdbDict = fme_xtaltools.pdbtools(ref).get_refinement_stats_dict()
                 db_dict.update(pdbDict)
-                db_dict['DataProcessingScore'] = self.calculate_processing_score(db_dict)
+                db_dict['DataProcessingScore'] = self.calculate_score(db_dict)
                 break
             if not 'DataProcessingRefinementScore' in db_dict:
                 db_dict['DataProcessingRefinementScore'] = 0.0
