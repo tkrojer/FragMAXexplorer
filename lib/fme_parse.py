@@ -380,6 +380,7 @@ class read_dimple(QtCore.QThread):
         self.parse_file_system()
 
     def parse_file_system(self):
+        print(os.path.join(self.projectDir,'refine','*'))
         for s in sorted(glob.glob(os.path.join(self.projectDir,'refine','*'))):
             x = s[s.rfind('/')+1:]
             print('>>>>>>>',x)

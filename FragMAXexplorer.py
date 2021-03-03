@@ -115,6 +115,7 @@ class FragMAXexplorer(QtGui.QApplication):
         self.work_thread.start()
 
     def select_dimple(self):
+        print('selecting dimple runs...')
         self.work_thread = fme_parse.read_dimple(self.projectDir, self.dbFile)
         self.connect(self.work_thread, QtCore.SIGNAL("update_progress_bar"), self.update_progress_bar)
         self.connect(self.work_thread, QtCore.SIGNAL("update_status_bar(QString)"), self.update_status_bar)
