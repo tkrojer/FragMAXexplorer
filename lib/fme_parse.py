@@ -80,19 +80,20 @@ class read_process_dir(QtCore.QThread):
                 db_dict.update(logDict)
                 db_dict['DataProcessingPathToLogfile'] = log
                 break
-            self.parse_refinement_results(db_dict)
+            out = self.parse_refinement_results(db_dict, out)
         print('>>> writing logfile')
         os.chdir(self.projectDir)
         f = open('out.txt','w')
         f.write(out)
         f.close()
 
-    def parse_refinement_results(self,db_dict):
+    def parse_refinement_results(self,db_dict, out):
         for r in self.refi:
             db_dict['RefinementProgram'] = r
             for ref in glob.glob(os.path.join(self.fragmaxDir,'results',db_dict['DataCollectionRun'],
                                               db_dict['DataProcessingProgram'],r,'final.pdb')):
                 db_dict['RefinementPDB_latest'] = ref
+                out += 'ref: ' + ref + '\n'
                 if os.path.isfile(ref.replace('.pdb','.mtz')):
                     db_dict['RefinementMTZ_latest'] = ref.replace('.pdb','.mtz')
                 pdbDict = fme_xtaltools.pdbtools(ref).get_refinement_stats_dict()
@@ -102,7 +103,8 @@ class read_process_dir(QtCore.QThread):
             if not 'DataProcessingScore' in db_dict:
                 db_dict['DataProcessingScore'] = 0.0
             self.update_db(db_dict)
-            self.copy_files(db_dict)
+            out = self.copy_files(db_dict, out)
+        return out
 
     def calculate_score(self,db_dict):
         score = 0.0
@@ -128,6 +130,7 @@ class read_process_dir(QtCore.QThread):
                 os.chdir(os.path.join(self.projectDir))
                 if not os.path.isdir(db_dict['CrystalName']):
                     os.mkdir(db_dict['CrystalName'])
+                    out += 'here...' + '\n'
                 os.chdir(db_dict['CrystalName'])
                 if not os.path.isdir('auto-processing'):
                     os.mkdir('auto-processing')
@@ -160,8 +163,10 @@ class read_process_dir(QtCore.QThread):
 #                pass
 
         except TypeError:
+            out += 'ERROR' + '\n'
             pass
 
+        return out
 
 
 class select_highest_score(QtCore.QThread):
