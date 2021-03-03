@@ -65,12 +65,14 @@ class read_process_dir(QtCore.QThread):
             mtzFile = None
             mtzDBdict = {}
             logFile = None
+            db_dict['DataProcessingPathToMTZfile'] = ''
             for mtz in glob.glob(os.path.join(s,self.pipelineDict[autoproc_pipeline][0])):
                 out += 'mtz: ' + mtz + '\n'
                 mtzDict = fme_xtaltools.mtztools(mtz).read_mtz_header()
                 db_dict.update(mtzDict)
                 db_dict['DataProcessingPathToMTZfile'] = mtz
                 break
+            db_dict['DataProcessingPathToLogfile'] = ''
             for log in glob.glob(os.path.join(s,self.pipelineDict[autoproc_pipeline][1])):
                 out += 'log: ' +log + '\n'
                 if log.endswith('.log'):
@@ -88,6 +90,8 @@ class read_process_dir(QtCore.QThread):
         f.close()
 
     def parse_refinement_results(self, db_dict, out):
+        db_dict['RefinementPDB_latest'] = ''
+        db_dict['RefinementMTZ_latest'] = ''
         for r in self.refi:
             db_dict['RefinementProgram'] = r
             for ref in glob.glob(os.path.join(self.fragmaxDir,'results',db_dict['DataCollectionRun'],
@@ -128,6 +132,7 @@ class read_process_dir(QtCore.QThread):
         out += str(db_dict) + '\n'
         try:
             if os.path.isfile(db_dict['DataProcessingPathToLogfile']) and os.path.isfile(db_dict['DataProcessingPathToMTZfile']) and os.path.isfile(db_dict['RefinementPDB_latest']) and os.path.isfile(db_dict['RefinementMTZ_latest']):
+                out += 'made it to here' + '\n'
                 os.chdir(os.path.join(self.projectDir))
                 if not os.path.isdir(db_dict['CrystalName']):
                     os.mkdir(db_dict['CrystalName'])
