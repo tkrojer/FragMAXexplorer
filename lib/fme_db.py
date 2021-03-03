@@ -16,17 +16,22 @@ class data_source:
         self.column_list=[
             # SQLite column name                    XCE column name                             SQLite type             display in overview tab
             # from Lab36
-            ['ID',                          'ID',                   'INTEGER PRIMARY KEY',  0],
-            ['CrystalName',                 'Sample ID',            'TEXT',                 0],
-            ['ProteinName',                 'ProteinName',          'TEXT',                 1],
-            ['ProjectDirectory',            'ProjectDirectory',     'TEXT',                 0],
-            ['CompoundCode',                'Compound ID',          'TEXT',                 1],
-            ['CompoundSMILES',              'Smiles',               'TEXT',                 1],
-            ['DataCollectionRun',           'Run',                  'TEXT',                 0],
-            ['DataProcessingProgram',       'Program',              'TEXT',                 1],
-            ['RefinementProgram',           'Refinement\nProgram',  'TEXT',                 1],
-            ['LastUpdated',                 'LastUpdated',          'TEXT',                 0],
-            ['LastUpdated_by',              'LastUpdated_by',       'TEXT',                 0]
+            ['ID',                          'ID',                       'INTEGER PRIMARY KEY',  0],
+            ['CrystalName',                 'Sample ID',                'TEXT',                 0],
+            ['ProteinName',                 'ProteinName',              'TEXT',                 1],
+            ['ProjectDirectory',            'ProjectDirectory',         'TEXT',                 0],
+            ['CompoundCode',                'Compound ID',              'TEXT',                 1],
+            ['CompoundSMILES',              'Smiles',                   'TEXT',                 1],
+            ['DataCollectionRun',           'Run',                      'TEXT',                 0],
+            ['DataProcessingProgram',       'Program',                  'TEXT',                 1],
+            ['DataProcessingRmergeLow',     'Rmerge\nLow',              'TEXT',                 1],
+            ['DataProcessingIsigHigh',      'Mn<I/sig(I)>\nHigh',       'TEXT',                 1],
+            ['RefinementProgram',           'Refinement\nProgram',      'TEXT',                 1],
+            ['RefinementRcryst',            'Refinement\nRcryst',       'TEXT',                 1],
+            ['RefinementRfree',             'Refinement\nRfree',        'TEXT',                 1],
+            ['RefinementSpaceGroup',        'Refinement\nSpace Group',  'TEXT',                 1],
+            ['LastUpdated',                 'LastUpdated',              'TEXT',                 0],
+            ['LastUpdated_by',              'LastUpdated_by',           'TEXT',                 0]
         ]
 
         self.data_collection_columns = [

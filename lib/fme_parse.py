@@ -12,15 +12,16 @@ import fme_db
 
 class read_process_dir(QtCore.QThread):
 
-    def __init__(self, mainDir, dbFile):
+    def __init__(self, fragMaxDir, mainDir, dbFile):
         QtCore.QThread.__init__(self)
 #        self.fragmaxDir = os.path.join(mainDir,'fragmax')
 #        self.projectDir = os.path.join(mainDir,'fragmax','fme')
 #        self.compoundDir = os.path.join(mainDir,'fragmax','fragments')
 
-        self.fragmaxDir = mainDir
-        self.projectDir = os.path.join(mainDir,'fme')
-        self.compoundDir = os.path.join(mainDir,'fragments')
+        self.fragmaxDir = fragMaxDir
+        self.projectDir = mainDir
+#        self.projectDir = os.path.join(mainDir,'fme')
+#        self.compoundDir = os.path.join(mainDir,'fragments')
 
         self.db = fme_db.data_source(dbFile)
 
@@ -131,22 +132,22 @@ class read_process_dir(QtCore.QThread):
                 shutil.copy(db_dict['RefinementMTZ_latest'], 'init.mtz')
 
             # compound
-            try:
-                compoundID = db_dict['CrystalName'].split('-')[1]
-                if not 'Apo' in compoundID:
-                    os.chdir(os.path.join(self.projectDir,db_dict['CrystalName']))
-                    if not os.path.isdir('ligand_files'):
-                        os.mkdir('ligand_files')
-                    os.chdir('ligand_files')
-                    if os.path.isfile(os.path.join(self.compoundDir,compoundID+'.cif')):
-                        if not os.path.isfile(compoundID+'.cif'):
-                            shutil.copy(os.path.join(self.compoundDir,compoundID+'.cif'),compoundID+'.cif')
-                    if os.path.isfile(os.path.join(self.compoundDir,compoundID+'.pdb')):
-                        if not os.path.isfile(compoundID+'.pdb'):
-                            shutil.copy(os.path.join(self.compoundDir,compoundID+'.pdb'),compoundID+'.pdb')
-
-            except IndexError:
-                pass
+#            try:
+#                compoundID = db_dict['CrystalName'].split('-')[1]
+#                if not 'Apo' in compoundID:
+#                    os.chdir(os.path.join(self.projectDir,db_dict['CrystalName']))
+#                    if not os.path.isdir('ligand_files'):
+#                        os.mkdir('ligand_files')
+#                    os.chdir('ligand_files')
+#                    if os.path.isfile(os.path.join(self.compoundDir,compoundID+'.cif')):
+#                        if not os.path.isfile(compoundID+'.cif'):
+#                            shutil.copy(os.path.join(self.compoundDir,compoundID+'.cif'),compoundID+'.cif')
+#                    if os.path.isfile(os.path.join(self.compoundDir,compoundID+'.pdb')):
+#                        if not os.path.isfile(compoundID+'.pdb'):
+#                            shutil.copy(os.path.join(self.compoundDir,compoundID+'.pdb'),compoundID+'.pdb')
+#
+#            except IndexError:
+#                pass
 
         except TypeError:
             pass

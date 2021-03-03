@@ -34,16 +34,26 @@ class FragMAXexplorer(QtGui.QApplication):
     def start_gui(self):
 
         try:
-            self.projectDir = sys.argv[1]
+            self.fragMaxDir = sys.argv[1]
+            self.fmeDir = sys.argv[2]
         except IndexError:
-            print('ERROR: please specify project directory')
+            print('ERROR: please specify fragmax & project directory')
             quit()
 
 #        self.projectDir = '/data/visitors/biomax/20200593/20210223'
 #        self.dbFile = os.path.join(self.projectDir,'fragmax','db','nsp10.sqlite')
 #        self.dbFile = '/Users/tobiaskrojer/tmp/tmp.sqlite'
-        self.dbFile = os.path.join(self.projectDir,'db','fme.sqlite')
+        self.projectDir = os.path.join(self.fmeDir, 'refine')
+        print('>>>',self.projectDir)
+        if not os.path.isdir(self.fmeDir):
+            os.mkdir(self.fmeDir)
+        if not os.path.isdir(self.projectDir):
+            os.mkdir(self.projectDir)
+        if not os.path.isdir(os.path.join(self.fmeDir, 'db')):
+            os.mkdir(os.path.join(self.fmeDir, 'db'))
+        self.dbFile = os.path.join(self.fmeDir,'db','fme.sqlite')
         if not os.path.isfile(self.dbFile):
+            self.db = fme_db.data_source(self.dbFile).create_empty_data_source_file()
             print('ERROR: should be here ' + self.dbFile)
             quit()
 
@@ -78,7 +88,7 @@ class FragMAXexplorer(QtGui.QApplication):
 
 
     def parse_process_directory(self):
-        self.work_thread = fme_parse.read_process_dir(self.projectDir, self.dbFile)
+        self.work_thread = fme_parse.read_process_dir(self.fragMaxDir, self.projectDir, self.dbFile)
         self.connect(self.work_thread, QtCore.SIGNAL("update_progress_bar"), self.update_progress_bar)
         self.connect(self.work_thread, QtCore.SIGNAL("update_status_bar(QString)"), self.update_status_bar)
         self.connect(self.work_thread, QtCore.SIGNAL("finished()"), self.thread_finished)
