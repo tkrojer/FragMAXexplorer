@@ -71,6 +71,7 @@ class data_source:
             ['DataProcessingUniqueReflectionsLow',      'Unique Reflections\nlow',              'TEXT',                 1],
             ['DataProcessingUniqueReflectionsHigh',     'Unique Reflections\nhigh',             'TEXT',                 1],
             ['DataProcessingScore',                     'DataProcessing\nScore',                'TEXT',                 1],
+            ['DataProcessingRefinementScore',           'DataProcessing\nScore',                'TEXT',                 1],
             ['DataProcessingStatus',                    'DataProcessing\nStatus',               'TEXT',                 1],
             ['RefinementProgram',                       'Refinement\nProgram',                  'TEXT',                 1],
             ['RefinementOutcome',                       'Refinement\nOutcome',                  'TEXT',                 1],

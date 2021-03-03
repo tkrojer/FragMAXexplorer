@@ -102,6 +102,9 @@ class FragMAXexplorer(QtGui.QApplication):
     def select_ap_dimple(self):
         self.select_datasets('ap_dimple')
 
+    def select_ap(self):
+        self.select_datasets('ap')
+
     def select_datasets(self, selection):
         self.work_thread = fme_parse.select_highest_score(self.projectDir, self.dbFile, selection)
         self.connect(self.work_thread, QtCore.SIGNAL("update_progress_bar"), self.update_progress_bar)

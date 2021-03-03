@@ -102,10 +102,13 @@ class read_process_dir(QtCore.QThread):
                     db_dict['RefinementMTZ_latest'] = ref.replace('.pdb','.mtz')
                 pdbDict = fme_xtaltools.pdbtools(ref).get_refinement_stats_dict()
                 db_dict.update(pdbDict)
-                db_dict['DataProcessingScore'] = self.calculate_score(db_dict)
+                db_dict['DataProcessingRefinementScore'] = self.calculate_score(db_dict)
+                db_dict['DataProcessingScore'] = self.calculate_processing_score(db_dict)
                 break
             if not 'DataProcessingScore' in db_dict:
                 db_dict['DataProcessingScore'] = 0.0
+            if not 'DataProcessingRefinementScore' in db_dict:
+                db_dict['DataProcessingRefinementScore'] = 0.0
             self.update_db(db_dict)
             out = self.copy_files(db_dict, out)
         return out
@@ -124,6 +127,21 @@ class read_process_dir(QtCore.QThread):
             pass
 
         return score
+
+    def calculate_processing_score(self,db_dict):
+        score = 0.0
+        try:
+            score = (float(db_dict['DataProcessingUniqueReflectionsOverall']) *
+                     float(db_dict['DataProcessingCompletenessOverall']) *
+                     float(db_dict['DataProcessingIsigOverall']) *
+                     float(db_dict['DataProcessingNsymop']) ) / ( float(db_dict['DataProcessingUnitCellVolume']) )
+        except KeyError:
+            pass
+        except TypeError:
+            pass
+
+        return score
+
 
     def update_db(self,db_dict):
         self.db.update_db('plexTable',db_dict)
@@ -213,6 +231,7 @@ class select_highest_score(QtCore.QThread):
             self.emit(QtCore.SIGNAL('update_status_bar(QString)'), 'selecting ' + sample)
             # ['xtal-run-proc-refi']
             dbList = self.db.get_dicts_for_xtal_from_plexTable_as_list(sample)
+            tmpList = []
             for item in dbList:
                 if item['DataProcessingProgram'] == 'autoproc' and item['RefinementProgram'] == 'dimple':
                     db_dict = self.db.get_db_dict_for_sample_run_proc_refi_from_plexTable(sample,run,proc,refine)
@@ -226,12 +245,27 @@ class select_highest_score(QtCore.QThread):
             self.emit(QtCore.SIGNAL('update_status_bar(QString)'), 'selecting ' + sample)
             # ['xtal-run-proc-refi']
             dbList = self.db.get_dicts_for_xtal_from_plexTable_as_list(sample)
+            tmp
             for item in dbList:
                 if item['DataProcessingProgram'] == 'autoproc':
-                    db_dict = self.db.get_db_dict_for_sample_run_proc_refi_from_plexTable(sample,run,proc,refine)
-                    self.update_db(db_dict)
-                    self.set_symlinks(db_dict)
-                    break
+                    try:
+                        tmpList.append([item['CrystalName']+';'+item['DataCollectionRun']+';'+
+                                        item['DataProcessingProgram']+';'+item['RefinementProgram'],
+                                       float(item['DataProcessingScore']) ] )
+                    except ValueError:
+#                    print item['CrystalName']+';'+item['DataCollectionRun']+';'+item['DataProcessingProgram']+';'+item['RefinementProgram']
+                        pass
+
+            try:
+                best = max(tmpList, key=lambda x: x[1])
+                run = best[0].split(';')[1]
+                proc = best[0].split(';')[2]
+                refine = best[0].split(';')[3]
+                db_dict = self.db.get_db_dict_for_sample_run_proc_refi_from_plexTable(sample,run,proc,refine)
+                self.update_db(db_dict)
+                self.set_symlinks(db_dict)
+            except ValueError:
+                pass
 
 
     def highest_score(self):
@@ -248,7 +282,7 @@ class select_highest_score(QtCore.QThread):
                 try:
                     tmpList.append([item['CrystalName']+';'+item['DataCollectionRun']+';'+
                                     item['DataProcessingProgram']+';'+item['RefinementProgram'],
-                                   float(item['DataProcessingScore']) ] )
+                                   float(item['DataProcessingRefinementScore']) ] )
                 except ValueError:
 #                    print item['CrystalName']+';'+item['DataCollectionRun']+';'+item['DataProcessingProgram']+';'+item['RefinementProgram']
                     pass
@@ -256,7 +290,6 @@ class select_highest_score(QtCore.QThread):
         # select combination with highest score
             try:
                 best = max(tmpList, key=lambda x: x[1])
-#                print best[0].split(';'), best[1]
                 run = best[0].split(';')[1]
                 proc = best[0].split(';')[2]
                 refine = best[0].split(';')[3]

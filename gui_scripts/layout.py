@@ -22,6 +22,10 @@ class LayoutObjects():
         select_autoproc_dimple_datasets.triggered.connect(fme_object.select_ap_dimple)
         Datasource.addAction(select_autoproc_dimple_datasets)
 
+        select_autoproc_datasets = QtGui.QAction('&Select autoPROC', fme_object)
+        select_autoproc_datasets.triggered.connect(fme_object.select_ap)
+        Datasource.addAction(select_autoproc_datasets)
+
         update_table = QtGui.QAction('&Update table from DB', fme_object)
         update_table.triggered.connect(fme_object.populate_datasets_summary_table)
         Datasource.addAction(update_table)
