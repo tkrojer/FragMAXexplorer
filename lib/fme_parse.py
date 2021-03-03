@@ -81,6 +81,7 @@ class read_process_dir(QtCore.QThread):
                 db_dict['DataProcessingPathToLogfile'] = log
                 break
             self.parse_refinement_results(db_dict)
+        print('>>> writing logfile')
         f = open('out.txt','w')
         f.write(out)
         f.close()
