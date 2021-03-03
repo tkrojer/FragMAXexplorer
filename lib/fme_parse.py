@@ -203,6 +203,8 @@ class select_highest_score(QtCore.QThread):
             self.highest_score()
         elif self.selection == 'ap_dimple':
             self.ap_dimple()
+        elif self.selection == 'ap':
+            self.ap()
 
     def ap_dimple(self):
         for sample in self.allSamples:
@@ -216,6 +218,20 @@ class select_highest_score(QtCore.QThread):
                     db_dict = self.db.get_db_dict_for_sample_run_proc_refi_from_plexTable(sample,run,proc,refine)
                     self.update_db(db_dict)
                     self.set_symlinks(db_dict)
+
+    def ap(self):
+        for sample in self.allSamples:
+            self.unset_symlinks(sample)
+#            print(sample)
+            self.emit(QtCore.SIGNAL('update_status_bar(QString)'), 'selecting ' + sample)
+            # ['xtal-run-proc-refi']
+            dbList = self.db.get_dicts_for_xtal_from_plexTable_as_list(sample)
+            for item in dbList:
+                if item['DataProcessingProgram'] == 'autoproc':
+                    db_dict = self.db.get_db_dict_for_sample_run_proc_refi_from_plexTable(sample,run,proc,refine)
+                    self.update_db(db_dict)
+                    self.set_symlinks(db_dict)
+                    break
 
 
     def highest_score(self):
@@ -274,10 +290,14 @@ class select_highest_score(QtCore.QThread):
     def set_symlinks(self,db_dict):
         try:
             os.chdir(os.path.join(self.projectDir,db_dict['CrystalName']))
-            os.symlink(os.path.join('auto-processing',db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'],'init.pdb'),'init.pdb')
-            os.symlink(os.path.join('auto-processing',db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'],'init.mtz'),'init.mtz')
-            os.symlink(os.path.join('auto-processing',db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'],db_dict['CrystalName'] + '.mtz'),db_dict['CrystalName'] + '.mtz')
-            os.symlink(os.path.join('auto-processing',db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'],db_dict['CrystalName'] + '.log'),db_dict['CrystalName'] + '.log')
+            if os.path.isfile(os.path.join('auto-processing',db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'],'init.pdb')):
+                os.symlink(os.path.join('auto-processing',db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'],'init.pdb'),'init.pdb')
+            if os.path.isfile(os.path.join('auto-processing',db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'],'init.mtz')):
+                os.symlink(os.path.join('auto-processing',db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'],'init.mtz'),'init.mtz')
+            if os.path.isfile(os.path.join('auto-processing',db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'],db_dict['CrystalName'] + '.mtz')):
+                os.symlink(os.path.join('auto-processing',db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'],db_dict['CrystalName'] + '.mtz'),db_dict['CrystalName'] + '.mtz')
+            if os.path.isfile(os.path.join('auto-processing',db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'],db_dict['CrystalName'] + '.log')):
+                os.symlink(os.path.join('auto-processing',db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'],db_dict['CrystalName'] + '.log'),db_dict['CrystalName'] + '.log')
         except OSError:
             print('ERROR: directory does not exist ' + os.path.join(self.projectDir,db_dict['CrystalName']))
             pass
