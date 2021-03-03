@@ -278,6 +278,7 @@ class select_highest_score(QtCore.QThread):
             dbList = self.db.get_dicts_for_xtal_from_plexTable_as_list(sample)
             tmpList = []
             for item in dbList:
+                print('>>>>>>>>>>>>>>')
 #                print 'score',item['DataProcessingScore']
                 try:
                     tmpList.append([item['CrystalName']+';'+item['DataCollectionRun']+';'+
@@ -289,6 +290,7 @@ class select_highest_score(QtCore.QThread):
 #            print tmpList
         # select combination with highest score
             try:
+                print('>>>>>>>> scoring')
                 best = max(tmpList, key=lambda x: x[1])
                 run = best[0].split(';')[1]
                 proc = best[0].split(';')[2]
@@ -323,6 +325,7 @@ class select_highest_score(QtCore.QThread):
     def set_symlinks(self,db_dict):
         try:
             os.chdir(os.path.join(self.projectDir,db_dict['CrystalName']))
+            print('>>>>>> setting symlinks')
             if os.path.isfile(os.path.join('auto-processing',db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'],'init.pdb')):
                 os.symlink(os.path.join('auto-processing',db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'],'init.pdb'),'init.pdb')
             if os.path.isfile(os.path.join('auto-processing',db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'],'init.mtz')):
