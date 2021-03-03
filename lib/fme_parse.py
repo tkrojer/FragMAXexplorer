@@ -245,7 +245,7 @@ class select_highest_score(QtCore.QThread):
             self.emit(QtCore.SIGNAL('update_status_bar(QString)'), 'selecting ' + sample)
             # ['xtal-run-proc-refi']
             dbList = self.db.get_dicts_for_xtal_from_plexTable_as_list(sample)
-            tmp
+            tmpList = []
             for item in dbList:
                 if item['DataProcessingProgram'] == 'autoproc':
                     try:
