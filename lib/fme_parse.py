@@ -131,23 +131,27 @@ class read_process_dir(QtCore.QThread):
     def copy_files(self,db_dict, out):
         out += str(db_dict) + '\n'
         try:
-            if os.path.isfile(db_dict['DataProcessingPathToLogfile']) and os.path.isfile(db_dict['DataProcessingPathToMTZfile']) and os.path.isfile(db_dict['RefinementPDB_latest']) and os.path.isfile(db_dict['RefinementMTZ_latest']):
-                out += 'made it to here' + '\n'
-                os.chdir(os.path.join(self.projectDir))
-                if not os.path.isdir(db_dict['CrystalName']):
-                    os.mkdir(db_dict['CrystalName'])
-                    out += 'here...' + '\n'
-                os.chdir(db_dict['CrystalName'])
-                if not os.path.isdir('auto-processing'):
-                    os.mkdir('auto-processing')
-                os.chdir('auto-processing')
-                if not os.path.isdir(db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram']):
-                    os.mkdir(db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'])
-                os.chdir(db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'])
-                print('copying ' + db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'])
+#            if os.path.isfile(db_dict['DataProcessingPathToLogfile']) and os.path.isfile(db_dict['DataProcessingPathToMTZfile']) and os.path.isfile(db_dict['RefinementPDB_latest']) and os.path.isfile(db_dict['RefinementMTZ_latest']):
+            out += 'made it to here' + '\n'
+            os.chdir(os.path.join(self.projectDir))
+            if not os.path.isdir(db_dict['CrystalName']):
+                os.mkdir(db_dict['CrystalName'])
+                out += 'here...' + '\n'
+            os.chdir(db_dict['CrystalName'])
+            if not os.path.isdir('auto-processing'):
+                os.mkdir('auto-processing')
+            os.chdir('auto-processing')
+            if not os.path.isdir(db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram']):
+                os.mkdir(db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'])
+            os.chdir(db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'])
+            print('copying ' + db_dict['DataCollectionRun']+'_'+db_dict['DataProcessingProgram']+'_'+db_dict['RefinementProgram'])
+            if os.path.isfile(db_dict['DataProcessingPathToLogfile']):
                 shutil.copy(db_dict['DataProcessingPathToLogfile'], db_dict['CrystalName'] + '.log')
+            if os.path.isfile(db_dict['DataProcessingPathToMTZfile']):
                 shutil.copy(db_dict['DataProcessingPathToMTZfile'], db_dict['CrystalName'] + '.mtz')
+            if os.path.isfile(db_dict['RefinementPDB_latest']):
                 shutil.copy(db_dict['RefinementPDB_latest'], 'init.pdb')
+            if os.path.isfile(db_dict['RefinementMTZ_latest']):
                 shutil.copy(db_dict['RefinementMTZ_latest'], 'init.mtz')
 
             # compound
