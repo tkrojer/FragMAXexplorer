@@ -404,6 +404,7 @@ class read_dimple(QtCore.QThread):
 
 
     def update_db(self,db_dict):
+        print('updating db...')
         self.db.update_db('plexTable',db_dict)
         self.db.update_db('mainTable',db_dict)
 

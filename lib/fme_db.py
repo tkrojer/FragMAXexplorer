@@ -185,6 +185,7 @@ class data_source:
                 ' DataProcessingProgram = "{0!s}" and '.format(data_dict['DataProcessingProgram']) +
                 ' RefinementProgram = "{0!s}" ;'.format(data_dict['RefinementProgram'])
             )
+            print sql
             cursor.execute(sql)
         connect.commit()
 
