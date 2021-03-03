@@ -163,8 +163,9 @@ class read_process_dir(QtCore.QThread):
 #            except IndexError:
 #                pass
 
-        except TypeError:
+        except TypeError as e:
             out += 'ERROR' + '\n'
+            out += str(e) + '\n'
             pass
 
         return out
