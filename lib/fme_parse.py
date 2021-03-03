@@ -383,6 +383,7 @@ class read_dimple(QtCore.QThread):
         print(os.path.join(self.projectDir,'*'))
         for s in sorted(glob.glob(os.path.join(self.projectDir,'*'))):
             x = s[s.rfind('/')+1:]
+            self.unset_symlinks(x)
             print('>>>>>>>',x)
             db_dict = {}
             db_dict['CrystalName'] = x
@@ -408,3 +409,14 @@ class read_dimple(QtCore.QThread):
         os.symlink('dimple/final.pdb','init.pdb')
         os.symlink('dimple/final.mtz','init.mtz')
 
+    def unset_symlinks(self, sample):
+        try:
+            os.chdir(os.path.join(self.projectDir,sample))
+            print(os.path.join(self.projectDir,sample))
+            if os.path.islink('init.pdb'):
+                os.unlink('init.pdb')
+            if os.path.islink('init.mtz'):
+                os.unlink('init.mtz')
+        except OSError:
+            print('ERROR: directory does not exist ' + os.path.join(self.projectDir,sample))
+            pass
