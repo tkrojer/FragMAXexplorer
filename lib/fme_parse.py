@@ -200,13 +200,13 @@ class read_process_dir(QtCore.QThread):
 
 class select_highest_score(QtCore.QThread):
 
-    def __init__(self, mainDir, dbFile, selection):
+    def __init__(self, projectDir, dbFile, selection):
         QtCore.QThread.__init__(self)
 #        self.resultsDir = os.path.join(mainDir,'fragmax','results')
 #        self.projectDir = os.path.join(mainDir,'fragmax','fme')
 
-        self.resultsDir = os.path.join(mainDir,'results')
-        self.projectDir = os.path.join(mainDir,'fme')
+#        self.resultsDir = os.path.join(mainDir,'results')
+        self.projectDir = projectDir
 
         self.db = fme_db.data_source(dbFile)
 
