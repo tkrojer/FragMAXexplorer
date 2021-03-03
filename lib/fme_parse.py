@@ -382,6 +382,7 @@ class read_dimple(QtCore.QThread):
     def parse_file_system(self):
         for s in sorted(glob.glob(os.path.join(self.projectDir,'refine','*'))):
             x = s[s.rfind('/')+1:]
+            print('>>>>>>>',x)
             db_dict = {}
             db_dict['CrystalName'] = x
             if os.path.isfile(os.path.join(s,'dimple','final.pdb')):
