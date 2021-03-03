@@ -364,3 +364,45 @@ class start_COOT(QtCore.QThread):
         # coot at Diamond always or sometimes at least open in home directory, so then it won't find the .pkl file
         pickle.dump(self.settings,open(os.path.join(os.getenv('HOME'),'.fme_settings.pkl'),'wb'))
         os.system('cd {0!s}\ncoot --no-guano --no-state-script --script {1!s}'.format(os.getenv('HOME'), os.path.join(os.getenv('FragMAXexplorer_DIR'),'lib','fme_coot.py')))
+
+
+class read_dimple(QtCore.QThread):
+
+    def __init__(self, mainDir, dbFile):
+        QtCore.QThread.__init__(self)
+
+        self.projectDir = mainDir
+
+        self.db = fme_db.data_source(dbFile)
+
+    def run(self):
+
+        self.parse_file_system()
+
+    def parse_file_system(self):
+        for s in sorted(glob.glob(os.path.join(self.projectDir,'refine','*'))):
+            x = s[s.rfind('/')+1:]
+            db_dict = {}
+            db_dict['CrystalName'] = x
+            if os.path.isfile(os.path.join(s,'dimple','final.pdb')):
+                db_dict['RefinementProgram'] = 'dimple'
+                db_dict['RefinementPDB_latest'] = os.path.join(s,'dimple','final.pdb')
+                db_dict['RefinementMTZ_latest'] = os.path.join(s,'dimple','final.mtz')
+                pdbDict = fme_xtaltools.pdbtools(os.path.join(s,'dimple','final.pdb')).get_refinement_stats_dict()
+                runs = self.db.runs_of_crystal_in_plexTable(x)
+                for r in runs:
+                    db_dict['DataCollectionRun'] = r
+                    db_dict['DataProcessingProgram'] = 'autoproc'
+                    self.update_db(db_dict)
+            self.set_symlinks(db_dict)
+
+
+    def update_db(self,db_dict):
+        self.db.update_db('plexTable',db_dict)
+        self.db.update_db('mainTable',db_dict)
+
+    def set_symlinks(self,db_dict):
+        os.chdir(os.path.join(self.projectDir,db_dict['CrystalName']))
+        os.symlink('dimple/final.pdb','init.pdb')
+        os.symlink('dimple/final.mtz','init.mtz')
+

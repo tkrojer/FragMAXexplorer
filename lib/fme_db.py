@@ -211,6 +211,21 @@ class data_source:
                 collectedXtals.append(str(sample[0]))
         return collectedXtals
 
+    def runs_of_crystal_in_plexTable(self,xtal):
+        connect=sqlite3.connect(self.data_source_file)     # creates sqlite file if non existent
+        cursor = connect.cursor()
+        cursor.execute("select distinct DataCollectionRun from plexTable where CrystalName = '{0!s}'".format(xtal))
+        collectedXtals=[]
+        samples = cursor.fetchall()
+        for sample in samples:
+            if str(sample[0]) not in collectedXtals:
+                collectedXtals.append(str(sample[0]))
+        return collectedXtals
+
+
+
+
+
     def get_run_proc_refi_from_mainTable(self,sampleID):
         connect=sqlite3.connect(self.data_source_file)     # creates sqlite file if non existent
         cursor = connect.cursor()
