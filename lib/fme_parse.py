@@ -87,7 +87,7 @@ class read_process_dir(QtCore.QThread):
         f.write(out)
         f.close()
 
-    def parse_refinement_results(self,db_dict, out):
+    def parse_refinement_results(self, db_dict, out):
         for r in self.refi:
             db_dict['RefinementProgram'] = r
             for ref in glob.glob(os.path.join(self.fragmaxDir,'results',db_dict['DataCollectionRun'],
@@ -124,7 +124,7 @@ class read_process_dir(QtCore.QThread):
     def update_db(self,db_dict):
         self.db.update_db('plexTable',db_dict)
 
-    def copy_files(self,db_dict):
+    def copy_files(self,db_dict, out):
         try:
             if os.path.isfile(db_dict['DataProcessingPathToLogfile']) and os.path.isfile(db_dict['DataProcessingPathToMTZfile']) and os.path.isfile(db_dict['RefinementPDB_latest']) and os.path.isfile(db_dict['RefinementMTZ_latest']):
                 os.chdir(os.path.join(self.projectDir))
