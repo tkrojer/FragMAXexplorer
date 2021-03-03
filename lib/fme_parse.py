@@ -397,6 +397,7 @@ class read_dimple(QtCore.QThread):
                 for r in runs:
                     db_dict['DataCollectionRun'] = r
                     db_dict['DataProcessingProgram'] = 'autoproc'
+                    print(db_dict)
                     self.update_db(db_dict)
             self.set_symlinks(db_dict)
 
