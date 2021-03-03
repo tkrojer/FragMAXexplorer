@@ -124,6 +124,8 @@ class read_process_dir(QtCore.QThread):
             pass
         except TypeError:
             pass
+        except ValueError:
+            pass
 
         return score
 
